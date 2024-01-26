@@ -14,6 +14,7 @@ library(Open4Gene)
 
 ## Peak-to-gene linkage analysis with Open4Gene
 1. Load example data (./Open4Gene/inst/extdata/Open4Gene.Test.Data).
+```r
 		load(system.file("extdata", "Open4Gene.Test.Data", package = "Open4Gene"))
 		ls()
 		# [1] "ATAC.counts"   "RNA.counts"   "gene.annotation"   "gene_peak"   "meta"
@@ -21,6 +22,7 @@ library(Open4Gene)
 		#Gene                   Peak
 		#1 DAB2 chr5-39400433-39402082
 		#2 DAB2 chr5-39369336-39370159
+```
 
 2. Preparing the object for Open4Gene analysis
 		Open4Gene.obj <- CreateOpen4GeneObj(RNA = RNA.counts, ATAC = ATAC.counts, 
@@ -69,4 +71,3 @@ On output, Open4Gene.obj@res provides the following values for each gene~peak pa
 18. spearman.p (Spearman's p value between RNA and ATAC)
 
 You may need columns with (*) for the downstream analysis.
-
