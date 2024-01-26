@@ -26,7 +26,8 @@ head(gene_peak)
 
 2. Preparing the object for Open4Gene analysis
 ```r
-Open4Gene.obj <- CreateOpen4GeneObj(RNA = RNA.counts, ATAC = ATAC.counts, meta.data = meta, gene.peak.pair = gene_peak, covariates = c("lognCount_RNA","percent.mt"), celltypes = "Celltype")
+Open4Gene.obj <- CreateOpen4GeneObj(RNA = RNA.counts, ATAC = ATAC.counts, meta.data = meta,
+                  gene.peak.pair = gene_peak, covariates = c("lognCount_RNA","percent.mt"), celltypes = "Celltype")
 ```
 
 3. Run Open4Gene analysis
