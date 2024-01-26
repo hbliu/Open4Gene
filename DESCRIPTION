@@ -4,20 +4,25 @@ Version: 0.1.0
 Authors@R: person("Hongbo", "Liu", , "hongbo919@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "https://orcid.org/0000-0002-0733-8616"))
 Description: This packages provides set of utility functions that can be useful for association analysis between peak open chromatin and gene expression.
 Depends:
-    R (>= 4.1.0)
-License: `use_mit_license()`
+    R (>= 4.1.0),
+    pscl (>= 1.5.5),
+    dplyr,
+    progress (>= 1.2.2),
+    GenomicRanges (>= 1.43.3),
+    Matrix,
+    bedtoolsr,
+    EnsDb.Hsapiens.v75 (>= 2.99.0)
 Imports:
     pscl (>= 1.5.5),
     dplyr,
     progress (>= 1.2.2),
     GenomicRanges (>= 1.43.3),
     Matrix,
-    bedtoolsr
+    bedtoolsr,
+    EnsDb.Hsapiens.v75 (>= 2.99.0)
 Suggests:
-    devtools (>= 2.4.5),
-    EnsDb.Hsapiens.v75 (>= 2.99.0),
-    knitr,
-    rmarkdown
+    devtools (>= 2.4.5)
+License: use_mit_license()
 LazyData: true
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
