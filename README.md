@@ -39,9 +39,9 @@ Open4Gene.obj <- CreateOpen4GeneObj(RNA = RNA.counts,
 3. Run Open4Gene analysis
 ```r
 Open4Gene.obj <- Open4Gene(object = Open4Gene.obj,
-                            celltype = "All", # Other options: Cell type name, e.g., "PT"; or "Each" to analyze each cell type
-                            binary = FALSE,
-                            MinCellNum = 5)
+                          celltype = "All", # Other options: Cell type name, e.g., "PT"; or "Each" to analyze each cell type
+                          binary = FALSE,   # Binarize ATAC data if binary = TRUE
+                          MinCellNum = 5)   # Minimal number of cells with both RNA > 0 and ATAC > 0 for association test
 ```
 
 4. Output Open4Gene result
