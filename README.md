@@ -13,7 +13,7 @@ library(Open4Gene)
 ```
 
 ## Peak-to-gene linkage analysis with Open4Gene
-1. Load example data (./Open4Gene/inst/extdata/Open4Gene.Test.Data).
+1. Load example data (./Open4Gene/inst/extdata/Open4Gene.Test.Data)
 ```r
 load(system.file("extdata", "Open4Gene.Test.Data", package = "Open4Gene"))
 ls()
@@ -23,6 +23,7 @@ head(gene_peak)
 #1 DAB2 chr5-39400433-39402082
 #2 DAB2 chr5-39369336-39370159
 ```
+
 
 2. Preparing the object for Open4Gene analysis
 ```r
@@ -34,9 +35,13 @@ Open4Gene.obj <- CreateOpen4GeneObj(RNA = RNA.counts,
                                     celltypes = "Celltype")
 ```
 
+
 3. Run Open4Gene analysis
 ```r
-Open4Gene.obj <- Open4Gene(object = Open4Gene.obj, celltype = "All", binary = FALSE, MinCellNum = 5)
+Open4Gene.obj <- Open4Gene(object = Open4Gene.obj,
+                           celltype = "All",
+                           binary = FALSE,
+                           MinCellNum = 5)
 ```
 
 4. Output Open4Gene result
