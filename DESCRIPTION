@@ -9,19 +9,17 @@ Depends:
     dplyr,
     progress (>= 1.2.2),
     GenomicRanges (>= 1.43.3),
-    Matrix,
-    bedtoolsr,
-    EnsDb.Hsapiens.v75 (>= 2.99.0)
+    Matrix
 Imports:
     pscl (>= 1.5.5),
     dplyr,
     progress (>= 1.2.2),
     GenomicRanges (>= 1.43.3),
-    Matrix,
-    bedtoolsr,
-    EnsDb.Hsapiens.v75 (>= 2.99.0)
+    Matrix
 Suggests:
-    devtools (>= 2.4.5)
+    devtools (>= 2.4.5),
+    EnsDb.Hsapiens.v75 (>= 2.99.0),
+    bedtoolsr
 License: use_mit_license()
 LazyData: true
 Encoding: UTF-8
