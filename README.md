@@ -39,7 +39,7 @@ Open4Gene.obj <- CreateOpen4GeneObj(RNA = RNA.counts,
 3. Run Open4Gene analysis
 ```r
 Open4Gene.obj <- Open4Gene(object = Open4Gene.obj,
-                            celltype = "All", # Change this to a cell type name or "Each" if you want to run the analysis for each cell type
+                            celltype = "All", # Other options: Cell type name, e.g., "PT"; or "Each" to analyze each cell type
                             binary = FALSE,
                             MinCellNum = 5)
 ```
