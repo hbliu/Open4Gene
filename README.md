@@ -12,7 +12,7 @@ devtools::install_github("hbliu/Open4Gene")
 library(Open4Gene)
 ```
 
-## Peak-to-gene linkage analysis with Open4Gene
+## Run Open4Gene with example data
 1. Load example data (./Open4Gene/inst/extdata/Open4Gene.Test.Data)
 ```r
 load(system.file("extdata", "Open4Gene.Test.Data", package = "Open4Gene"))
