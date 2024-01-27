@@ -49,17 +49,6 @@ Open4Gene.obj <- Open4Gene(object = Open4Gene.obj,
 write.table(Open4Gene.obj@res, file = "Open4Gene.obj.All.res.txt", sep="\t", col.names=TRUE, row.names=FALSE, quote=FALSE)
 ```
 
-## Input
-This section describes how to prepare the input files for Open4Gene.
-Open4Gene needs following input data and parameters:
-- RNA dgCMatrix. scRNAseq matrix read as a sparse matrix
-- ATAC dgCMatrix. scATACseq matrix read as a sparse matrix
-- meta.data data.frame. Metadata table with covariates and a cell ID column ("cell")
-- gene.peak.pair data.frame. Dataframe that contains gene-peak pairs for Open4Gene to search through
-- covariates character. Assign covariates that are needed for the analysis. Must be names that are in the columns of meta.data
-- celltypes character. Assign celltype column from meta.data
-
-
 ## Output
 On output, Open4Gene.obj@res provides the following values for each gene~peak pair:
 1. gene
@@ -82,3 +71,35 @@ On output, Open4Gene.obj@res provides the following values for each gene~peak pa
 18. spearman.p (Spearman's p value between RNA and ATAC)
 
 You may need columns with (*) for the downstream analysis.
+
+
+## Input
+This section describes how to prepare the input files for Open4Gene.
+Open4Gene needs following input data and parameters:
+- RNA [dgCMatrix] Sparse matrix of scRNAseq read count, gene in row and cell in column
+- ATAC [dgCMatrix] Sparse matrix of scATACseq read count, gene in row and cell in column
+- meta.data [data.frame] Metadata table with covariates and a cell ID column ("cell")
+- gene.peak.pair [data.frame] Dataframe that contains gene-peak pairs for Open4Gene, gene (first column) and peak (second column)
+- gene.annotation [GRanges] Gene annotation, only needed when you want Open4Gene pick up the gene.peak.pair based on gene and peak distance
+- gene.peak.dis [integer] Distance (peak to gene body), only needed when you want Open4Gene pick up the gene.peak.pair based on gene and peak distance
+- covariates [character] Assign covariates that are needed for the analysis. Must be names that are in the columns of meta.data
+- celltypes [character] Assign celltype column from meta.data
+
+
+## Data preparation
+#RNA and ATAC read count matrix from Seurat object with both RNA and ATAC assays
+```r
+RNA.Count <- Seurat.object@assays$RNA@counts
+ATAC.Count <- Seurat.object@assays$ATAC@counts
+meta <- Seurat.object@meta.data
+```
+Note here that, the cell IDs from different matrix should match with each other, e.g. columns of RNA matrix, columns of ATAC matrix, and rows of meta.data
+
+#gene.peak.pair
+This is a dataframe that contains gene-peak pairs for Open4Gene, gene (first column) and peak (second column).
+Gene names should be included in the row names of RNA read count matrix, and peak names in the row names of ATAC read count matrix.
+```r
+Gene                   Peak
+1 DAB2 chr5-39400433-39402082
+2 DAB2 chr5-39369336-39370159
+```
