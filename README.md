@@ -120,5 +120,29 @@ This is a dataframe that contains gene-peak pairs for Open4Gene, gene (first col
 | DAB2 | chr5-39369336-39370159 |
 
 
+4. **Preparing the object for Open4Gene analysis using gene.annotation**
+
+Open4Gene can pick up the gene.peak.pair based on gene and peak distance based on the input data.
+Here, the gene.annotation is a gene annotation in GRanges object, e.g. EnsDb.Hsapiens.v75.
+Code for preparing object for Open4Gene analysis using gene.annotation of EnsDb.Hsapiens.v75.
+```r
+library(EnsDb.Hsapiens.v75)
+gene.annotation <- genes(EnsDb.Hsapiens.v75)
+Open4Gene.obj <- CreateOpen4GeneObj(RNA = RNA.counts, ATAC = ATAC.counts, meta.data = meta,
+                            gene.annotation = gene.annotation,
+                            gene.peak.dis = 100000,
+                            covariates = c("lognCount_RNA","percent.mt"), 
+                            celltypes = "Celltype")
+```
+
+Then, Open4Gene.obj will be inputed to Run Open4Gene analysis
+```r
+Open4Gene.obj <- Open4Gene(object = Open4Gene.obj,
+                          celltype = "All",
+                          binary = FALSE,
+                          MinCellNum = 5)
+```
+
+
 
 
