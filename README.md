@@ -175,6 +175,10 @@ Open4Gene analysis on 3000 pairs takes about 5 hours.
 To perform genome-wide analysis, we recommend using gene.peak.pair to control the number of pairs analyzed in each chunk.
 
 
+## Contact
+For any question, you are welcome to report your issue in Github or contact us hongbo.liu@pennmedicine.upenn.edu and ksusztak@pennmedicine.upenn.edu
+
+
 
 
 
