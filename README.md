@@ -103,10 +103,10 @@ Note here that, the cell IDs from different matrix should match with each other,
 
 This is a dataframe that contains cell information from the single cell RNA and ATAC
 ```r
-		                    cell	                    orig.ident	nCount_RNA	lognCount_RNA	nFeature_RNA	percent.mt	nCount_ATAC	nFeature_ATAC	Celltype
-HK2888_GTTTAACCAGCTCAAC-1	HK2888_GTTTAACCAGCTCAAC-1	HK2888	    741.25	    6.61	        634	            5.70	    2902	    2746	        PT
-HK2888_GGCTAGTGTCATGCCC-1	HK2888_GGCTAGTGTCATGCCC-1	HK2888	    2127.32    	7.66	        1510	        2.36	    9434	    8258	        Injured_PT
-HK2888_GGCTAGTGTAAGCTCA-1	HK2888_GGCTAGTGTAAGCTCA-1	HK2888	    1788.72   	7.49	        1345	        0.04	    11847	    10231	        LOH
+				cell	orig.ident	nCount_RNA	lognCount_RNA	nFeature_RNA	percent.mt	nCount_ATAC	nFeature_ATAC	Celltype
+HK2888_GTTTAACCAGCTCAAC-1	HK2888_GTTTAACCAGCTCAAC-1	HK2888	741.25	6.61	634	5.70	2902	2746	PT
+HK2888_GGCTAGTGTCATGCCC-1	HK2888_GGCTAGTGTCATGCCC-1	HK2888	2127.32	7.66	1510	2.36	9434	8258	Injured_PT
+HK2888_GGCTAGTGTAAGCTCA-1	HK2888_GGCTAGTGTAAGCTCA-1	HK2888	1788.72	7.49	1345	0.04	11847	10231	LOH
 ```
 Note here that, the cell IDs should be list in the column "cell".
 
