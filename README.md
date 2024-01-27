@@ -115,11 +115,11 @@ Note here that, the cell IDs should be list in the column "cell".
 
 This is a dataframe that contains gene-peak pairs for Open4Gene, gene (first column) and peak (second column).
 Gene names should be included in the row names of RNA read count matrix, and peak names in the row names of ATAC read count matrix.
-```r
-Gene                   Peak
-1 DAB2 chr5-39400433-39402082
-2 DAB2 chr5-39369336-39370159
-```
+| Gene | Peak                   |
+| ---- | ---------------------- |
+| DAB2 | chr5-39400433-39402082 |
+| DAB2 | chr5-39369336-39370159 |
+
 
 
 
