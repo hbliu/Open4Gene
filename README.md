@@ -87,7 +87,8 @@ Open4Gene needs following input data and parameters:
 
 
 ## Data preparation
-1. **RNA and ATAC read count matrix from Seurat object with both RNA and ATAC assays**
+1. **RNA and ATAC read count matrix**
+Code for extracting count matrix from Seurat object with both RNA and ATAC assays
 ```r
 RNA.Count <- Seurat.object@assays$RNA@counts
 ATAC.Count <- Seurat.object@assays$ATAC@counts
@@ -96,6 +97,7 @@ meta <- Seurat.object@meta.data
 Note here that, the cell IDs from different matrix should match with each other, e.g. columns of RNA matrix, columns of ATAC matrix, and rows of meta.data
 
 2. **gene.peak.pair**
+
 This is a dataframe that contains gene-peak pairs for Open4Gene, gene (first column) and peak (second column).
 Gene names should be included in the row names of RNA read count matrix, and peak names in the row names of ATAC read count matrix.
 ```r
@@ -103,4 +105,6 @@ Gene                   Peak
 1 DAB2 chr5-39400433-39402082
 2 DAB2 chr5-39369336-39370159
 ```
+
+
 
