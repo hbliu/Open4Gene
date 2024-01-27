@@ -125,6 +125,7 @@ This is a dataframe that contains gene-peak pairs for Open4Gene, gene (first col
 Open4Gene can pick up the gene.peak.pair based on gene and peak distance based on the input data.
 Here, the gene.annotation is a gene annotation in GRanges object, e.g. EnsDb.Hsapiens.v75.
 Code for preparing object for Open4Gene analysis using gene.annotation of EnsDb.Hsapiens.v75.
+
 ```r
 library(EnsDb.Hsapiens.v75)
 gene.annotation <- genes(EnsDb.Hsapiens.v75)
@@ -135,10 +136,34 @@ Open4Gene.obj <- CreateOpen4GeneObj(RNA = RNA.counts, ATAC = ATAC.counts, meta.d
                             celltypes = "Celltype")
 ```
 
-Then, Open4Gene.obj will be inputed to Run Open4Gene analysis
+Then, Open4Gene.obj will be inputed to Run Open4Gene analysis.
+
+
+## Options in Open4Gene analysis
+
+1. **Run Open4Gene for a given cell type, e.g. PT**
+
 ```r
 Open4Gene.obj <- Open4Gene(object = Open4Gene.obj,
-                          celltype = "All",
+                          celltype = "PT",  
+                          binary = FALSE,
+                          MinCellNum = 5)
+```
+
+2. **Run Open4Gene for each cell type**
+
+```r
+Open4Gene.obj <- Open4Gene(object = Open4Gene.obj,
+                          celltype = "Each",  
+                          binary = FALSE,
+                          MinCellNum = 5)
+```
+
+3. **Run Open4Gene using all cells**
+
+```r
+Open4Gene.obj <- Open4Gene(object = Open4Gene.obj,
+                          celltype = "All",  
                           binary = FALSE,
                           MinCellNum = 5)
 ```
