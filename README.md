@@ -139,7 +139,7 @@ Open4Gene.obj <- CreateOpen4GeneObj(RNA = RNA.counts, ATAC = ATAC.counts, meta.d
 Then, Open4Gene.obj will be inputed to Run Open4Gene analysis.
 
 
-## Options in Open4Gene analysis
+## Run Open4Gene
 
 1. **Run Open4Gene for a given cell type, e.g. PT**
 
@@ -167,6 +167,14 @@ Open4Gene.obj <- Open4Gene(object = Open4Gene.obj,
                           binary = FALSE,
                           MinCellNum = 5)
 ```
+
+
+## Warning
+It is time-consuming to run genome-wide peak-to-gene linkage analysis using Open4Gene.
+Open4Gene analysis on 3000 pairs takes about 5 hours.
+To perform genome-wide analysis, we recommend using gene.peak.pair to control the number of pairs analyzed in each chunk.
+
+
 
 
 
