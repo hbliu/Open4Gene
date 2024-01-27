@@ -107,6 +107,7 @@ This is a dataframe that contains cell information from the single cell RNA and 
 | HK2888_GTTTAACCAGCTCAAC-1 | HK2888     | 6.61          | 5.70       | PT         |
 | HK2888_GGCTAGTGTCATGCCC-1 | HK2888     | 7.66          | 2.36       | Injured_PT |
 | HK2888_GGCTAGTGTAAGCTCA-1 | HK2888     | 7.49          | 0.04       | LOH        |
+
 Note here that, the cell IDs should be list in the column "cell".
 
 
