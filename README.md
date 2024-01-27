@@ -79,10 +79,10 @@ Open4Gene needs following input data and parameters:
 - RNA [dgCMatrix] Sparse matrix of scRNAseq read count, gene in row and cell in column
 - ATAC [dgCMatrix] Sparse matrix of scATACseq read count, gene in row and cell in column
 - meta.data [data.frame] Metadata table with covariates and a cell ID column ("cell")
-- gene.peak.pair [data.frame] Dataframe that contains gene-peak pairs for Open4Gene, gene (first column) and peak (second column)
-- gene.annotation [GRanges] Gene annotation, only needed when you want Open4Gene pick up the gene.peak.pair based on gene and peak distance
-- gene.peak.dis [integer] Distance (peak to gene body), only needed when you want Open4Gene pick up the gene.peak.pair based on gene and peak distance
-- covariates [character] Assign covariates that are needed for the analysis. Must be names that are in the columns of meta.data
+- gene.peak.pair [data.frame] Dataframe that contains gene-peak pairs for Open4Gene
+- gene.annotation [GRanges] Gene annotation, e.g. EnsDb.Hsapiens.v75
+- gene.peak.dis [integer] Distance (peak to gene body), default is 100000 (bp)
+- covariates [character] Assign covariates that are needed for the analysis
 - celltypes [character] Assign celltype column from meta.data
 
 
