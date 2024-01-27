@@ -102,6 +102,12 @@ Note here that, the cell IDs from different matrix should match with each other,
 2. **meta.data**
 
 This is a dataframe that contains cell information from the single cell RNA and ATAC
+| cell                      | orig.ident | lognCount_RNA | percent.mt | Celltype   |
+| ------------------------- | ---------- | ------------- | ---------- | ---------- |
+| HK2888_GTTTAACCAGCTCAAC-1 | HK2888     | 6.61          | 5.70       | PT         |
+| HK2888_GGCTAGTGTCATGCCC-1 | HK2888     | 7.66          | 2.36       | Injured_PT |
+| HK2888_GGCTAGTGTAAGCTCA-1 | HK2888     | 7.49          | 0.04       | LOH        |
+
 ```r
 | cell                      | orig.ident | lognCount_RNA | percent.mt | Celltype   |
 | ------------------------- | ---------- | ------------- | ---------- | ---------- |
