@@ -87,7 +87,9 @@ Open4Gene needs following input data and parameters:
 
 
 ## Data preparation
+
 1. **RNA and ATAC read count matrix**
+
 Code for extracting count matrix from Seurat object with both RNA and ATAC assays
 ```r
 RNA.Count <- Seurat.object@assays$RNA@counts
@@ -105,6 +107,7 @@ Gene                   Peak
 1 DAB2 chr5-39400433-39402082
 2 DAB2 chr5-39369336-39370159
 ```
+
 
 
 
