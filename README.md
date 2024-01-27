@@ -101,7 +101,7 @@ Note here that, the cell IDs from different matrix should match with each other,
 
 2. **meta.data**
 
-This is a dataframe that contains cell information from the single cell RNA and ATAC, as following
+This is a dataframe that contains cell information from the single cell RNA and ATAC, as following.
 | cell                      | orig.ident | lognCount_RNA | percent.mt | Celltype   |
 | ------------------------- | ---------- | ------------- | ---------- | ---------- |
 | HK2888_GTTTAACCAGCTCAAC-1 | HK2888     | 6.61          | 5.70       | PT         |
@@ -113,8 +113,7 @@ Note here that, the cell IDs should be list in the column "cell".
 
 3. **gene.peak.pair**
 
-This is a dataframe that contains gene-peak pairs for Open4Gene, gene (first column) and peak (second column).
-Gene names should be included in the row names of RNA read count matrix, and peak names in the row names of ATAC read count matrix.
+This is a dataframe that contains gene-peak pairs for Open4Gene, gene (first column) and peak (second column), as following.
 | Gene | Peak                   |
 | ---- | ---------------------- |
 | DAB2 | chr5-39400433-39402082 |
