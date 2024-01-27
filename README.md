@@ -141,7 +141,7 @@ Then, Open4Gene.obj will be inputed to Run Open4Gene analysis.
 
 ## Run Open4Gene
 
-1. **Run Open4Gene for a given cell type, e.g. PT**
+**1. Run Open4Gene for a given cell type, e.g. PT**
 
 ```r
 Open4Gene.obj <- Open4Gene(object = Open4Gene.obj,
@@ -150,7 +150,7 @@ Open4Gene.obj <- Open4Gene(object = Open4Gene.obj,
                           MinCellNum = 5)
 ```
 
-2. **Run Open4Gene for each cell type**
+**2. Run Open4Gene for each cell type**
 
 ```r
 Open4Gene.obj <- Open4Gene(object = Open4Gene.obj,
@@ -159,7 +159,7 @@ Open4Gene.obj <- Open4Gene(object = Open4Gene.obj,
                           MinCellNum = 5)
 ```
 
-3. **Run Open4Gene using all cells**
+**3. Run Open4Gene using all cells**
 
 ```r
 Open4Gene.obj <- Open4Gene(object = Open4Gene.obj,
