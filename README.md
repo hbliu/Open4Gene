@@ -90,15 +90,28 @@ Open4Gene needs following input data and parameters:
 
 1. **RNA and ATAC read count matrix**
 
-Code for extracting count matrix from Seurat object with both RNA and ATAC assays
+Code for extracting count matrix and cell information from Seurat object with both RNA and ATAC assays:
 ```r
 RNA.Count <- Seurat.object@assays$RNA@counts
 ATAC.Count <- Seurat.object@assays$ATAC@counts
 meta <- Seurat.object@meta.data
 ```
-Note here that, the cell IDs from different matrix should match with each other, e.g. columns of RNA matrix, columns of ATAC matrix, and rows of meta.data
+Note here that, the cell IDs from different matrix should match with each other, e.g. columns of RNA matrix, columns of ATAC matrix, and rows of meta.data.
 
-2. **gene.peak.pair**
+
+2. **meta.data**
+
+This is a dataframe that contains cell information from the single cell RNA and ATAC
+```r
+		                    cell	                    orig.ident	nCount_RNA	lognCount_RNA	nFeature_RNA	percent.mt	nCount_ATAC	nFeature_ATAC	Celltype
+HK2888_GTTTAACCAGCTCAAC-1	HK2888_GTTTAACCAGCTCAAC-1	HK2888	    741.25	    6.61	        634	            5.70	    2902	    2746	        PT
+HK2888_GGCTAGTGTCATGCCC-1	HK2888_GGCTAGTGTCATGCCC-1	HK2888	    2127.32    	7.66	        1510	        2.36	    9434	    8258	        Injured_PT
+HK2888_GGCTAGTGTAAGCTCA-1	HK2888_GGCTAGTGTAAGCTCA-1	HK2888	    1788.72   	7.49	        1345	        0.04	    11847	    10231	        LOH
+```
+Note here that, the cell IDs should be list in the column "cell".
+
+
+3. **gene.peak.pair**
 
 This is a dataframe that contains gene-peak pairs for Open4Gene, gene (first column) and peak (second column).
 Gene names should be included in the row names of RNA read count matrix, and peak names in the row names of ATAC read count matrix.
@@ -107,7 +120,6 @@ Gene                   Peak
 1 DAB2 chr5-39400433-39402082
 2 DAB2 chr5-39369336-39370159
 ```
-
 
 
 
