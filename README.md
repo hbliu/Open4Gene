@@ -110,8 +110,13 @@ This is a dataframe that contains cell information from the single cell RNA and 
 
 Note here that, the cell IDs should be list in the column "cell".
 
+**3. covariates**
 
-**3. gene.peak.pair**
+The covariates are used for the regression analysis.
+Features of cells in metadata can be used as covariates, e.g. lognCount_RNA, percent.mt.
+
+
+**4. gene.peak.pair**
 
 This is a dataframe that contains gene-peak pairs for Open4Gene, gene (first column) and peak (second column), as following.
 | Gene | Peak                   |
@@ -120,7 +125,7 @@ This is a dataframe that contains gene-peak pairs for Open4Gene, gene (first col
 | DAB2 | chr5-39369336-39370159 |
 
 
-**4. Preparing the object for Open4Gene analysis using gene.annotation**
+**5. Preparing the object for Open4Gene analysis using gene.annotation**
 
 Open4Gene can pick up the gene.peak.pair based on gene and peak distance based on the input data.
 Here, the gene.annotation is a gene annotation in GRanges object, e.g. EnsDb.Hsapiens.v75.
