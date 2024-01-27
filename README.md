@@ -88,7 +88,7 @@ Open4Gene needs following input data and parameters:
 
 ## Data preparation
 
-1. **RNA and ATAC read count matrix**
+**1. RNA and ATAC read count matrix**
 
 Code for extracting count matrix and cell information from Seurat object with both RNA and ATAC assays:
 ```r
@@ -99,7 +99,7 @@ meta <- Seurat.object@meta.data
 Note here that, the cell IDs from different matrix should match with each other, e.g. columns of RNA matrix, columns of ATAC matrix, and rows of meta.data.
 
 
-2. **meta.data**
+**2. meta.data**
 
 This is a dataframe that contains cell information from the single cell RNA and ATAC, as following.
 | cell                      | orig.ident | lognCount_RNA | percent.mt | Celltype   |
@@ -111,7 +111,7 @@ This is a dataframe that contains cell information from the single cell RNA and 
 Note here that, the cell IDs should be list in the column "cell".
 
 
-3. **gene.peak.pair**
+**3. gene.peak.pair**
 
 This is a dataframe that contains gene-peak pairs for Open4Gene, gene (first column) and peak (second column), as following.
 | Gene | Peak                   |
@@ -120,7 +120,7 @@ This is a dataframe that contains gene-peak pairs for Open4Gene, gene (first col
 | DAB2 | chr5-39369336-39370159 |
 
 
-4. **Preparing the object for Open4Gene analysis using gene.annotation**
+**4. Preparing the object for Open4Gene analysis using gene.annotation**
 
 Open4Gene can pick up the gene.peak.pair based on gene and peak distance based on the input data.
 Here, the gene.annotation is a gene annotation in GRanges object, e.g. EnsDb.Hsapiens.v75.
