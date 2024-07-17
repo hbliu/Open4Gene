@@ -6,7 +6,7 @@ Hurdle Model-based Method for Peak-to-Gene Linkage Analysis.
 - Modeling linkages between peak open chromatin (ATAC) and gene expression (RNA) using regression model with covariates
 - Flexible specification of analysis using cells from a given cell type of interest, each cell type or all cells
 
-## How to build & install
+## How to build & install in R (>= 4.1.0)
 ```r
 devtools::install_github("hbliu/Open4Gene")
 library(Open4Gene)
@@ -20,8 +20,8 @@ ls()
 # "ATAC.Counts", "RNA.Counts", "Gene.Annotation", "Meta.Data", "Peak.Gene"   
 head(Peak.Gene)
 #Peak                   Gene
-#1 chr5-39400433-39402082 DAB2
-#2 chr5-39400433-39402082 DAB2
+#chr5-39400433-39402082 DAB2
+#chr5-39400433-39402082 DAB2
 ```
 
 
@@ -49,7 +49,7 @@ write.table(Open4Gene.obj@Res, file = "Open4Gene.obj.All.res.txt", sep="\t", col
 ```
 
 ## Output
-On output, Open4Gene.obj@res provides the following values for each gene~peak pair:
+On output, Open4Gene.obj@Res provides the following values for each gene~peak pair:
 1. Peak
 2. Gene
 3. Celltype (Cell type name, "All" means all cell in the input data)
@@ -137,7 +137,7 @@ Code for preparing object for Open4Gene analysis using Gene.Annotation of EnsDb.
 ```r
 library(EnsDb.Hsapiens.v75)
 Gene.Annotation <- genes(EnsDb.Hsapiens.v75)
-Open4Gene.obj <- CreateOpen4GeneObj(RNA = RNA.counts, ATAC = ATAC.counts, Meta.data = Meta.Data,
+Open4Gene.obj <- CreateOpen4GeneObj(RNA = RNA.Counts, ATAC = ATAC.Counts, Meta.data = Meta.Data,
                             Gene.Annotation = Gene.Annotation,
                             Peak2Gene.Dis = 100000,
                             Covariates = c("lognCount_RNA","percent.mt"), 

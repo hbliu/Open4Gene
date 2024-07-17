@@ -223,8 +223,8 @@ Extract.Peak2Gene.Pairs <- function(object){
 			options(dplyr.summarise.inform = FALSE)
 			seqlevelsStyle(Gene.Annotation) <- "UCSC"
 			Gene <- data.frame(Gene.Annotation)
-			Gene <- subset(Gene, Gene.Name %in% rownames(object@RNA))
-			Gene <- Gene %>% group_by(Gene.Name) %>% summarise(seqnames = unique(seqnames), start = min(start, na.rm=TRUE), end = max(end, na.rm=TRUE)) %>% as.data.frame
+			Gene <- subset(Gene, gene_name %in% rownames(object@RNA))
+			Gene <- Gene %>% group_by(gene_name) %>% summarise(seqnames = unique(seqnames), start = min(start, na.rm=TRUE), end = max(end, na.rm=TRUE)) %>% as.data.frame
 			if(length(Gene) == 0){
 					Error.term <- paste("Please provide genes available in RNA data")
 					Error <- c(Error, Error.term)
