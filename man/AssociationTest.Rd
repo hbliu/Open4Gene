@@ -4,15 +4,15 @@
 \alias{AssociationTest}
 \title{AssociationTest:}
 \usage{
-AssociationTest(DataM, gene, peak, method, formula, celltype, res)
+AssociationTest(DatMat, Gene, Peak, Method, Formula, Celltype, Res)
 }
 \arguments{
-\item{DataM}{Data Matrix including RNA count, ATAC count and meta data}
+\item{DatMat}{Data Matrix including RNA count, ATAC count and meta data}
 
-\item{method}{Statistic method used for association Test}
+\item{Method}{Statistic Method used for association Test}
 }
 \value{
-res Statistic result
+Res Statistic Result
 }
 \description{
 AssociationTest:

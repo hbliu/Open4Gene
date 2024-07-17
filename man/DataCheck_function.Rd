@@ -2,10 +2,10 @@
 % Please edit documentation in R/Open4Gene.R
 \name{DataCheck_function}
 \alias{DataCheck_function}
-\title{DataCheck and Type Checking for CreateOpen4GeneObject Constructor}
+\title{Data Checking for CreateOpen4GeneObject}
 \usage{
 DataCheck_function(object)
 }
 \description{
-DataCheck and Type Checking for CreateOpen4GeneObject Constructor
+Data Checking for CreateOpen4GeneObject
 }

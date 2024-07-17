@@ -1,6 +1,6 @@
 Package: Open4Gene
 Title: A tool for association analysis between peak open chromatin and gene expression
-Version: 0.1.0
+Version: 1.0.0
 Authors@R: person("Hongbo", "Liu", , "hongbo919@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "https://orcid.org/0000-0002-0733-8616"))
 Description: This packages provides set of utility functions that can be useful for association analysis between peak open chromatin and gene expression.
 Depends:

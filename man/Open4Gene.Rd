@@ -2,30 +2,30 @@
 % Please edit documentation in R/Open4Gene.R
 \name{Open4Gene}
 \alias{Open4Gene}
-\title{Open4Gene: main function}
+\title{Open4Gene: Main function}
 \usage{
 Open4Gene(
   object,
-  celltype = "All",
-  binary = FALSE,
-  method = "hurdle",
-  MinCellNum = 5
+  Celltype = "All",
+  Binary = FALSE,
+  Method = "hurdle",
+  MinNum.Cells = 5
 )
 }
 \arguments{
 \item{object}{Open4Gene object}
 
-\item{celltype}{User specified cell type defined in celltypes column of meta.data. "All" to test using all cells. "Each" to run test for each cell type. Others, the test will be perform for a given cell type.}
+\item{Celltype}{User specified cell type defined in Celltypes column of Meta.data. "All" to test using all cells. "Each" to run test for each cell type. Others, the test will be perform for a given cell type.}
 
-\item{binary}{If TRUE, the ATAC > 1 will be converted as 1.}
+\item{Binary}{If TRUE, the ATAC > 1 will be converted as 1.}
 
-\item{method}{Statistic method used to calculate the correlation between ATAC and RNA. "hurdle" for Zero-inflated Negative Binomial Regression based on hurdle model.}
+\item{Method}{"hurdle" for Zero-inflated Negative Binomial Regression based on hurdle model. Statistic method used to calculate the correlation between ATAC and RNA.}
 
-\item{MinCellNum}{Minimal number of cells with expression (RNA > 0) and cells with open chromatin (ATAC > 0) for association test.}
+\item{MinNum.Cells}{Minimal number of cells with expression (RNA > 0) and open chromatin (ATAC > 0) for association test.}
 }
 \value{
-Open4Gene object with updated field ress
+Open4Gene object with Results from hurdle model
 }
 \description{
-Open4Gene: main function
+Open4Gene: Main function
 }

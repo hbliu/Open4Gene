@@ -52,7 +52,8 @@ DataCheck_function <- function(object){
 #'
 #' @slot RNA dgCMatrix. A sparse matrix for RNA read count
 #' @slot ATAC dgCMatrix. A sparse matrix for ATAC read count
-#' @slot Meta.data data.frame. A meta data table with Covariates and cell ids in the rownames
+#' @slot Meta.data data.frame. A meta data table with Covariates; and Cell IDs is in the rownames
+#' @slot Meta.data data.frame. A meta data table with Covariates; and Cell IDs is in the rownames
 #' @slot Covariates character. Assign Covariates that are needed for the analysis. Must be names that are in the columns of Meta.data
 #' @slot Celltypes character. Assign Celltype column from Meta.data. Must be a name that is in the columns of Meta.data
 #' @slot Peak2Gene.Pairs data.frame. A table including Peak~Gene Pairs for analysis, with Peak (1st column) and Gene (2nd column)
@@ -73,13 +74,13 @@ CreateOpen4GeneObj <- setClass(
 		Peak2Gene.Pairs = 'data.frame',
 		Peak2Gene.Dis = 'numeric',
 		Gene.Annotation = 'GRanges',
-		cellids = 'character',
+		Cell.IDs = 'character',
 		Res = 'data.frame'
 	),
 	prototype = list(
 		Peak2Gene.Pairs = data.frame(),
 		Peak2Gene.Dis = 100000,
-		Celltypes = "All"
+		Celltypes = "Cell_Type"
 	),
 	validity = DataCheck_function
 )
@@ -137,7 +138,7 @@ Open4Gene <- function(object, Celltype = "All", Binary = FALSE, Method = "hurdle
 	
 		############# Run test according to the selection of cell types
 		if(Celltype == "All"){	# Run test using all cells
-			if(length(DatMat$RNA[DatMat$RNA == 0]) > 0 & length(DatMat$RNA[ DatMat$RNA > 0]) >= MinNum.Cells & length(DatMat$ATAC[ DatMat$ATAC > 0]) >= MinNum.Cells){
+			if(length(DatMat$RNA[DatMat$RNA == 0]) > 0 & length(DatMat$RNA[DatMat$RNA > 0]) >= MinNum.Cells & length(DatMat$ATAC[ DatMat$ATAC > 0]) >= MinNum.Cells){
 				Res <- AssociationTest(DatMat, Gene, Peak, Method, Formula, Celltype, Res)
 			}
 		}else if(Celltype == "Each"){# Run test for each cell type
