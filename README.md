@@ -17,42 +17,41 @@ library(Open4Gene)
 ```r
 load(system.file("extdata", "Open4Gene.Test.Data", package = "Open4Gene"))
 ls()
-# [1] "ATAC.counts"   "RNA.counts"   "gene.annotation"   "gene_peak"   "meta"
-head(gene_peak)
-#Gene                   Peak
-#1 DAB2 chr5-39400433-39402082
-#2 DAB2 chr5-39369336-39370159
+# "ATAC.Counts", "RNA.Counts", "Gene.Annotation", "Meta.Data", "Peak.Gene"   
+head(Peak.Gene)
+#Peak                   Gene
+#1 chr5-39400433-39402082 DAB2
+#2 chr5-39400433-39402082 DAB2
 ```
 
 
 2. Preparing the object for Open4Gene analysis
 ```r
-Open4Gene.obj <- CreateOpen4GeneObj(RNA = RNA.counts,
-                                    ATAC = ATAC.counts,
-                                    meta.data = meta,
-                                    gene.peak.pair = gene_peak,
-                                    covariates = c("lognCount_RNA","percent.mt"),
-                                    celltypes = "Celltype")
+Open4Gene.obj <- CreateOpen4GeneObj(RNA = RNA.Counts,
+                                    ATAC = ATAC.Counts,
+                                    Meta.data = Meta.Data,
+                                    Peak2Gene.Pairs = Peak.Gene,
+                                    Covariates = c("lognCount_RNA","percent.mt"),
+                                    Celltypes = "Cell_Type")
 ```
-
 
 3. Run Open4Gene analysis
 ```r
 Open4Gene.obj <- Open4Gene(object = Open4Gene.obj,
-                          celltype = "All", # Other options: Cell type name, e.g., "PT"; or "Each" to analyze each cell type
-                          binary = FALSE,   # Binarize ATAC data if binary = TRUE
-                          MinCellNum = 5)   # Minimal number of cells with both RNA > 0 and ATAC > 0 for association test
+                          Celltype = "All", # Other options: Cell type name, e.g., "PT"; or "Each" to analyze each cell type
+                          Binary = FALSE,   # Binarize ATAC data if binary = TRUE
+                          MinNum.Cells = 5)   # Minimal number of cells with both RNA > 0 and ATAC > 0 for association test
 ```
 
 4. Output Open4Gene result
 ```r
-write.table(Open4Gene.obj@res, file = "Open4Gene.obj.All.res.txt", sep="\t", col.names=TRUE, row.names=FALSE, quote=FALSE)
+write.table(Open4Gene.obj@Res, file = "Open4Gene.obj.All.res.txt", sep="\t", col.names=TRUE, row.names=FALSE, quote=FALSE)
 ```
 
 ## Output
 On output, Open4Gene.obj@res provides the following values for each gene~peak pair:
-1. gene
-2. peak
+1. Peak
+2. Gene
 3. Celltype (Cell type name, "All" means all cell in the input data)
 4. TotalCellNum (Total number of cells used for the analysis)
 5. ExpressCellNum (Number of cells expressing given gene, RNA read count > 1)
@@ -78,12 +77,12 @@ This section describes how to prepare the input files for Open4Gene.
 Open4Gene needs following input data and parameters:
 - **RNA** [dgCMatrix] Sparse matrix of scRNAseq read count, gene in row and cell in column
 - **ATAC** [dgCMatrix] Sparse matrix of scATACseq read count, gene in row and cell in column
-- **meta.data** [data.frame] Metadata table with covariates and a cell ID column ("cell")
-- **gene.peak.pair** [data.frame] Dataframe that contains gene-peak pairs for Open4Gene
-- **gene.annotation** [GRanges] Gene annotation, e.g. EnsDb.Hsapiens.v75
-- **gene.peak.dis** [integer] Distance (peak to gene body), default is 100000 (bp)
-- **covariates** [character] Assign covariates that are needed for the analysis
-- **celltypes** [character] Assign celltype column from meta.data
+- **Meta.data** [data.frame] Meta data table with covariates; with cell ID in the rownames
+- **Covariates** [character] Assign covariates that are needed for the analysis
+- **Celltypes** [character] Assign celltype column from Meta.data
+- **Peak2Gene.Pairs** [data.frame] Dataframe that contains Peak~Gene pairs to analyze using Open4Gene
+- **Gene.Annotation** [GRanges] Gene annotation, e.g. EnsDb.Hsapiens.v75
+- **Peak2Gene.Dis** [integer] Distance (peak to gene body), default is 100000 (bp)
 
 
 ## Data preparation
@@ -92,53 +91,57 @@ Open4Gene needs following input data and parameters:
 
 Code for extracting count matrix and cell information from Seurat object with both RNA and ATAC assays:
 ```r
-RNA.Count <- Seurat.object@assays$RNA@counts
-ATAC.Count <- Seurat.object@assays$ATAC@counts
-meta <- Seurat.object@meta.data
+RNA.Counts <- Seurat.object@assays$RNA@counts
+ATAC.Counts <- Seurat.object@assays$ATAC@counts
+Meta.Data <- Seurat.object@meta.data
 ```
-Note here that, the cell IDs from different matrix should match with each other, e.g. columns of RNA matrix, columns of ATAC matrix, and rows of meta.data.
+Note here that, the cell IDs from different matrix should match with each other, e.g. columns of RNA matrix, columns of ATAC matrix, and rows of Meta.Data.
 
 
-**2. meta.data**
+**2. Meta.Data**
 
-This is a dataframe that contains cell information from the single cell RNA and ATAC, as following.
-| cell                      | orig.ident | lognCount_RNA | percent.mt | Celltype   |
+This is a dataframe that contains cell information from the single cell RNA and ATAC, as following. 
+|                           | orig.ident | lognCount_RNA | percent.mt | Cell_Type  |
 | ------------------------- | ---------- | ------------- | ---------- | ---------- |
 | HK2888_GTTTAACCAGCTCAAC-1 | HK2888     | 6.61          | 5.70       | PT         |
 | HK2888_GGCTAGTGTCATGCCC-1 | HK2888     | 7.66          | 2.36       | Injured_PT |
 | HK2888_GGCTAGTGTAAGCTCA-1 | HK2888     | 7.49          | 0.04       | LOH        |
 
-Note here that, the cell IDs should be list in the column "cell".
+Note here that, the cell IDs should be provided in the rownames. Make and check it using
+```r
+Meta.Data <- Seurat.object@meta.data
+head(rownames(Meta.Data))
+```
 
-**3. covariates**
+**3. Covariates**
 
 The covariates are used for the regression analysis.
 Features of cells in metadata can be used as covariates, e.g. lognCount_RNA, percent.mt.
 
 
-**4. gene.peak.pair**
+**4. Peak2Gene.Pairs**
 
-This is a dataframe that contains gene-peak pairs for Open4Gene, gene (first column) and peak (second column), as following.
-| Gene | Peak                   |
-| ---- | ---------------------- |
-| DAB2 | chr5-39400433-39402082 |
-| DAB2 | chr5-39369336-39370159 |
+This is a dataframe that contains Peak~Gene pairs for Open4Gene, Peak (first column) and Gene (second column), as following.
+| Peak | Gene                   |
+| ---------------------- | ---- |
+| chr5-39400433-39402082 | DAB2 |
+| chr5-39369336-39370159 | DAB2 |
 
 
-**5. Preparing the object for Open4Gene analysis using gene.annotation**
+**5. Preparing the object for Open4Gene analysis using Gene.Annotation**
 
-Open4Gene can pick up the gene.peak.pair based on gene and peak distance based on the input data.
-Here, the gene.annotation is a gene annotation in GRanges object, e.g. EnsDb.Hsapiens.v75.
-Code for preparing object for Open4Gene analysis using gene.annotation of EnsDb.Hsapiens.v75.
+Open4Gene can pick up the Peak2Gene.Pairs based on peak and gene distance (Peak2Gene.Dis) based on the input data.
+Here, the Gene.Annotation is a gene annotation in GRanges object, e.g. EnsDb.Hsapiens.v75.
+Code for preparing object for Open4Gene analysis using Gene.Annotation of EnsDb.Hsapiens.v75.
 
 ```r
 library(EnsDb.Hsapiens.v75)
-gene.annotation <- genes(EnsDb.Hsapiens.v75)
-Open4Gene.obj <- CreateOpen4GeneObj(RNA = RNA.counts, ATAC = ATAC.counts, meta.data = meta,
-                            gene.annotation = gene.annotation,
-                            gene.peak.dis = 100000,
-                            covariates = c("lognCount_RNA","percent.mt"), 
-                            celltypes = "Celltype")
+Gene.Annotation <- genes(EnsDb.Hsapiens.v75)
+Open4Gene.obj <- CreateOpen4GeneObj(RNA = RNA.counts, ATAC = ATAC.counts, Meta.data = Meta.Data,
+                            Gene.Annotation = Gene.Annotation,
+                            Peak2Gene.Dis = 100000,
+                            Covariates = c("lognCount_RNA","percent.mt"), 
+                            Celltypes = "Cell_Type")
 ```
 
 Then, Open4Gene.obj will be inputed to Run Open4Gene analysis.
@@ -150,38 +153,38 @@ Then, Open4Gene.obj will be inputed to Run Open4Gene analysis.
 
 ```r
 Open4Gene.obj <- Open4Gene(object = Open4Gene.obj,
-                          celltype = "PT",  
-                          binary = FALSE,
-                          MinCellNum = 5)
+                          Celltype = "PT",  
+                          Binary = FALSE,
+                          MinNum.Cells = 5)
 ```
 
 **2. Run Open4Gene for each cell type**
 
 ```r
 Open4Gene.obj <- Open4Gene(object = Open4Gene.obj,
-                          celltype = "Each",  
-                          binary = FALSE,
-                          MinCellNum = 5)
+                          Celltype = "Each",  
+                          Binary = FALSE,
+                          MinNum.Cells = 5)
 ```
 
 **3. Run Open4Gene using all cells**
 
 ```r
 Open4Gene.obj <- Open4Gene(object = Open4Gene.obj,
-                          celltype = "All",  
-                          binary = FALSE,
-                          MinCellNum = 5)
+                          Celltype = "All",  
+                          Binary = FALSE,
+                          MinNum.Cells = 5)
 ```
 
 
 ## Warning
 It is time-consuming to run genome-wide peak-to-gene linkage analysis using Open4Gene.
 Open4Gene analysis on 3000 pairs takes about 5 hours.
-To perform genome-wide analysis, we recommend using gene.peak.pair to control the number of pairs analyzed in each chunk.
+To perform genome-wide analysis, we recommend using Peak2Gene.Pairs to control the number of pairs analyzed in each chunk.
 
 
 ## Contact
-For any question, you are welcome to report your issue in Github or contact us hongbo.liu@pennmedicine.upenn.edu and ksusztak@pennmedicine.upenn.edu
+For any question, you are welcome to report your issue in Github or contact us hongbo919@gmail.com and ksusztak@pennmedicine.upenn.edu
 
 
 
