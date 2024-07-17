@@ -5,60 +5,60 @@
 #library(dplyr)
 #library(bedtoolsr)
 
-#' DataCheck and Type Checking for CreateOpen4GeneObject Constructor
+#' Data Checking for CreateOpen4GeneObject
 DataCheck_function <- function(object){
-	errors <- character()
+	Error <- character()
 
 	#Check number of cells
 	RNA_Cell_Num <- ncol(object@RNA)
 	ATAC_Cell_Num <- ncol(object@ATAC)
 
 	Gene_Num <- lengths(object@RNA@Dimnames)[1]
-	num_peaks <- lengths(object@ATAC@Dimnames)[1]
+	num_Peaks <- lengths(object@ATAC@Dimnames)[1]
 
-	#Check if the number of cells match between RNA and ATAC matrix.
+	#Check the number of cells in RNA and ATAC matrix.
 	if(ncol(object@RNA) != ncol(object@ATAC)){
-		msg <- paste("Error: The num of cells in RNA matrix is different with the number of cells in ATAC matrix.", "Please check the data.")
-		errors <- c(errors, msg)
+		Error.term <- paste("Error: The numbers of cells in ATAC matrix and RNA matrix are different.", "Please check and input the Paired data")
+		Error <- c(Error, Error.term)
 	}
 
-	#Check gene.peak.pair
-	if(!(length(object@gene.peak.pair) == 0)){
-		if(!all(object@gene.peak.pair[[1]] %in% rownames(object@RNA))){
-			msg <- paste("Some genes in the gene.peak.pair is NOT available in RNA matrix.", "Please check the data.")
-			errors <- c(errors, msg)
+	#Check Peak2Gene.Pairs
+	if(!(length(object@Peak2Gene.Pairs) == 0)){
+		if(!all(object@Peak2Gene.Pairs[[1]] %in% rownames(object@ATAC))){
+			Error.term <- paste("Warning: The Peak2Gene.Pairs include Peaks which are NOT available in ATAC matrix.", "Please take care of these Peaks.")
+			Error <- c(Error, Error.term)
+		}
+		if(!all(object@Peak2Gene.Pairs[[2]] %in% rownames(object@RNA))){
+			Error.term <- paste("Warning: The Peak2Gene.Pairs include Genes which are NOT available in RNA matrix.", "Please take care of these Genes.")
+			Error <- c(Error, Error.term)
 		}
 
-		if(!all(object@gene.peak.pair[[2]] %in% rownames(object@ATAC))){
-			msg <- paste("Some peaks in the gene.peak.pair is NOT available in ATAC matrix.", "Please check the data.")
-			errors <- c(errors, msg)
-		}
 	}
 
-	#If gene.peak.pair is not present, use the gene.annotation and peak position to extract the gene.peak.pair:
-	if(length(object@gene.peak.pair) == 0){
-		if(length(object@gene.annotation) == 0){
-			msg <- paste("The gene annotation is needed to extract the gene~peak pairs.")
-			errors <- c(errors, msg)
+	#Use the Gene.Annotation and Peak position to extract the Peak2Gene.Pairs if Peak2Gene.Pairs is not given:
+	if(length(object@Peak2Gene.Pairs) == 0){
+		if(length(object@Gene.Annotation) == 0){
+			Error.term <- paste("Please provide matched Gene annotation (E.x. EnsDb.Hsapiens.v75) which is needed to extract the Peak~Gene Pairs.")
+			Error <- c(Error, Error.term)
 		}
 	}
 	
-	#### Summary of checking
-	if (length(errors) == 0) TRUE else errors
+	#### Data Checking Report
+	if (length(Error) == 0) TRUE else Error
 }
 
 
-#' Open4Gene Class Constructor
+#' Open4Gene Class
 #'
-#' @slot RNA dgCMatrix. scRNAseq matrix read as a sparse matrix
-#' @slot ATAC dgCMatrix. scATACseq matrix read as a sparse matrix
-#' @slot meta.data data.frame. Metadata table with covariates and a cell ID column ("cell")
-#' @slot gene.peak.pair data.frame. Dataframe that contains gene-peak pairs for Open4Gene to search through
-#' @slot gene.peak.dis integer. Distance (peak to gene body) used to extract gene.peak.pair
-#' @slot gene.annotation GRanges. Gene annotation used to extract gene.peak.pair
-#' @slot covariates character. Assign covariates that are needed for the analysis. Must be names that are in the columns of meta.data
-#' @slot celltypes character. Assign celltype column from meta.data
-#' @slot res data.frame. Table for result of association test, which is initialized as empty.
+#' @slot RNA dgCMatrix. A sparse matrix for RNA read count
+#' @slot ATAC dgCMatrix. A sparse matrix for ATAC read count
+#' @slot Meta.data data.frame. A meta data table with Covariates and cell ids in the rownames
+#' @slot Covariates character. Assign Covariates that are needed for the analysis. Must be names that are in the columns of Meta.data
+#' @slot Celltypes character. Assign Celltype column from Meta.data. Must be a name that is in the columns of Meta.data
+#' @slot Peak2Gene.Pairs data.frame. A table including Peak~Gene Pairs for analysis, with Peak (1st column) and Gene (2nd column)
+#' @slot Peak2Gene.Dis integer. Maximal distance (Peak to Gene body) used to extract Peak2Gene.Pairs, only used if no Peak2Gene.Pairs is given
+#' @slot Gene.Annotation GRanges. Gene annotation (E.x. EnsDb.Hsapiens.v75) used to extract Peak2Gene.Pairs, only used if no Peak2Gene.Pairs is given
+#' @slot Res data.frame. Table for result of association test, which is initialized as empty.
 #'
 #' @return Open4Gene object to use for further analysis
 #' @export
@@ -67,123 +67,121 @@ CreateOpen4GeneObj <- setClass(
 	slots = c(
 		RNA = 'dgCMatrix',
 		ATAC = 'dgCMatrix',
-		meta.data = 'data.frame',
-		gene.peak.pair = 'data.frame',	### A table including gene~peak pairs for analysis, with gene (1st column) and peak (2nd column).
-		gene.peak.dis = 'numeric',		### Distance (peak to gene body) used to extract gene.peak.pair. This is only used if no gene.peak.pair is detected. Please provide this and gene.annotation if you don't provide gene.peak.pair for test.
-		gene.annotation = 'GRanges',	### Gene annotation used to extract gene.peak.pair
-		covariates = 'character',
-		celltypes = 'character',
-		res = 'data.frame'
+		Meta.data = 'data.frame',
+		Covariates = 'character',
+		Celltypes = 'character',
+		Peak2Gene.Pairs = 'data.frame',
+		Peak2Gene.Dis = 'numeric',
+		Gene.Annotation = 'GRanges',
+		cellids = 'character',
+		Res = 'data.frame'
 	),
 	prototype = list(
-		gene.peak.pair = data.frame(),
-		gene.peak.dis = 100000,
-		celltypes = "All"
+		Peak2Gene.Pairs = data.frame(),
+		Peak2Gene.Dis = 100000,
+		Celltypes = "All"
 	),
 	validity = DataCheck_function
 )
 
 
-#' Open4Gene: main function
+#' Open4Gene: Main function
 #'
 #' @param object Open4Gene object
-#' @param celltype User specified cell type defined in celltypes column of meta.data. "All" to test using all cells. "Each" to run test for each cell type. Others, the test will be perform for a given cell type.
-#' @param binary If TRUE, the ATAC > 1 will be converted as 1.
-#' @param method Statistic method used to calculate the correlation between ATAC and RNA. "hurdle" for Zero-inflated Negative Binomial Regression based on hurdle model.
-#' @param MinCellNum Minimal number of cells with expression (RNA > 0) and cells with open chromatin (ATAC > 0) for association test.
-#'
-#' @return Open4Gene object with updated field ress
+#' @param Celltype User specified cell type defined in Celltypes column of Meta.data. "All" to test using all cells. "Each" to run test for each cell type. Others, the test will be perform for a given cell type.
+#' @param Binary If TRUE, the ATAC > 1 will be converted as 1.
+#' @param Method "hurdle" for Zero-inflated Negative Binomial Regression based on hurdle model. Statistic method used to calculate the correlation between ATAC and RNA. 
+#' @param MinNum.Cells Minimal number of cells with expression (RNA > 0) and open chromatin (ATAC > 0) for association test.
+#' @return Open4Gene object with Results from hurdle model
 #' @export
-Open4Gene <- function(object, celltype = "All", binary = FALSE, method = "hurdle", MinCellNum = 5){
-	# Extract gene~peak pairs used for regression
-	print('Prepare gene~peak pairs for regression analysis...', quote = FALSE)
-	object <- Extract.gene.peak.pair(object)
-	print(c(paste("Start regression analysis for",nrow(object@gene.peak.pair), "gene~peak pairs...")), quote = FALSE)
-	res <- data.frame()
+Open4Gene <- function(object, Celltype = "All", Binary = FALSE, Method = "hurdle", MinNum.Cells = 5){
+	#### Extract Peak~Gene Pairs used for regression
+	print('Prepare Peak~Gene Pairs for regression analysis...', quote = FALSE)
+	object <- Extract.Peak2Gene.Pairs(object)
+	print(c(paste("Start regression analysis for",nrow(object@Peak2Gene.Pairs), "Peak~Gene Pairs...")), quote = FALSE)
+	Res <- data.frame()
 	
-	# Extract RNA and ATAC used for regression
-	object@RNA <- object@RNA[unique(object@gene.peak.pair[,1]),]
-	object@ATAC <- object@ATAC[unique(object@gene.peak.pair[,2]),]
+	#### Extract RNA and ATAC used for regression
+	object@RNA <- object@RNA[unique(object@Peak2Gene.Pairs[,2]), , drop = FALSE]
+	object@ATAC <- object@ATAC[unique(object@Peak2Gene.Pairs[,1]), , drop = FALSE]
 
 	#### Define progress bar
-	pb <- progress_bar$new(total=nrow(object@gene.peak.pair), format = 'Processing [:bar] :current/:total (:percent) eta: :eta', clear = FALSE, width = 80)
+	Probar <- progress_bar$new(total=nrow(object@Peak2Gene.Pairs), format = 'Processing [:bar] :current/:total (:percent) eta: :eta', clear = FALSE, width = 80)
 	
-	#### Define formula for regression
-	res_var <- "RNA"
-	pred_var <- c("ATAC", object@covariates) 
-	formula <- as.formula(paste(res_var, paste(pred_var, collapse = "+"), sep = "~"))
-	for (i in 1:length(object@covariates)){
-		object@meta.data[,object@covariates[i]] <- as.integer(object@meta.data[,object@covariates[i]])
+	#### Define Formula for regression
+	Var.Res <- "RNA"
+	Var.Factor <- c("ATAC", object@Covariates) 
+	Formula <- as.formula(paste(Var.Res, paste(Var.Factor, collapse = "+"), sep = "~"))
+	for (i in 1:length(object@Covariates)){
+		object@Meta.data[,object@Covariates[i]] <- as.integer(object@Meta.data[,object@Covariates[i]])
 	}
 	
-	for (n in 1:nrow(object@gene.peak.pair)){
-		pb$tick()
-		gene <- object@gene.peak.pair[n,1] #Gene is in the first column in gene.peak.pair
-		peak <- object@gene.peak.pair[n,2] #Peak is in the second column in gene.peak.pair
-		ATAC_data <- data.frame(cell = colnames(object@ATAC), ATAC = object@ATAC[peak,])	### This step takes time if extracting peak from full dataset
-		meta.data <- object@meta.data
-		if(!("cell" %in% colnames(meta.data))){       ## use rownames as cell id if "cell" column is not available.
-			meta.data$cell <- rownames(meta.data)
-		}
+	for (n in 1:nrow(object@Peak2Gene.Pairs)){
+		Probar$tick()
+		Peak <- object@Peak2Gene.Pairs[n,1] ### Peak is in the first column in Peak2Gene.Pairs
+		Gene <- object@Peak2Gene.Pairs[n,2] ### Gene is in the second column in Peak2Gene.Pairs
+		ATAC_data <- data.frame(Cell.ID = colnames(object@ATAC), ATAC = object@ATAC[Peak,])
+		Meta.data <- object@Meta.data
+		Meta.data$Cell.ID <- rownames(Meta.data)
 		
-		#Binarize ATAC data if binary = TRUE
-		if(binary){
+		#ATAC data will be binarized if Binary = TRUE
+		if(Binary){
 			ATAC_data[ATAC_data$ATAC > 0,]$ATAC <- 1
 		}
 
-		Gene_exp <- object@RNA[gene,]
-		DataM <- data.frame(cell=names(Gene_exp),RNA=as.integer(Gene_exp))
-		DataM <- merge(DataM, ATAC_data, by="cell")
-		DataM <- merge(DataM, meta.data, by="cell")
-		Celltypes <- as.character(unique(DataM[[object@celltypes]]))
+		Gene_exp <- object@RNA[Gene,]
+		DatMat <- data.frame(Cell.ID=names(Gene_exp),RNA=as.integer(Gene_exp))
+		DatMat <- merge(DatMat, ATAC_data, by="Cell.ID")
+		DatMat <- merge(DatMat, Meta.data, by="Cell.ID")
+		Celltypes <- as.character(unique(DatMat[[object@Celltypes]]))
 	
 		############# Run test according to the selection of cell types
-		if(celltype == "All"){	# Run test using all cells
-			if(length( DataM$RNA[ DataM$RNA == 0] ) > 0 & length( DataM$RNA[ DataM$RNA > 0] ) >= MinCellNum & length( DataM$ATAC[ DataM$ATAC > 0] ) >= MinCellNum){
-				res <- AssociationTest(DataM, gene, peak, method, formula, celltype, res)
+		if(Celltype == "All"){	# Run test using all cells
+			if(length(DatMat$RNA[DatMat$RNA == 0]) > 0 & length(DatMat$RNA[ DatMat$RNA > 0]) >= MinNum.Cells & length(DatMat$ATAC[ DatMat$ATAC > 0]) >= MinNum.Cells){
+				Res <- AssociationTest(DatMat, Gene, Peak, Method, Formula, Celltype, Res)
 			}
-		}else if(celltype == "Each"){# Run test for each cell type
+		}else if(Celltype == "Each"){# Run test for each cell type
 			for (c in 1:length(Celltypes)){
-				SubDataM <- DataM[DataM[[object@celltypes]] == Celltypes[c],]
-				if(length( SubDataM$RNA[ SubDataM$RNA == 0] ) > 0 & length( SubDataM$RNA[ SubDataM$RNA > 0] ) >= MinCellNum & length( SubDataM$ATAC[ SubDataM$ATAC > 0] ) >= MinCellNum){
-					res <- AssociationTest(SubDataM, gene, peak, method, formula, Celltypes[c], res)
+				SubDatMat <- DatMat[DatMat[[object@Celltypes]] == Celltypes[c],]
+				if(length(SubDatMat$RNA[SubDatMat$RNA == 0] ) > 0 & length(SubDatMat$RNA[ SubDatMat$RNA > 0]) >= MinNum.Cells & length(SubDatMat$ATAC[ SubDatMat$ATAC > 0]) >= MinNum.Cells){
+					Res <- AssociationTest(SubDatMat, Gene, Peak, Method, Formula, Celltypes[c], Res)
 				}
 			}
 		}else{ # Run test only for a given cell type
-			SubDataM <- DataM[DataM[[object@celltypes]] == celltype,]
-			if(length( SubDataM$RNA[ SubDataM$RNA == 0] ) > 0 & length( SubDataM$RNA[ SubDataM$RNA > 0] ) >= MinCellNum & length( SubDataM$ATAC[ SubDataM$ATAC > 0] ) >= MinCellNum){
-				res <- AssociationTest(SubDataM, gene, peak, method, formula, celltype, res)
+			SubDatMat <- DatMat[DatMat[[object@Celltypes]] == Celltype,]
+			if(length(SubDatMat$RNA[ SubDatMat$RNA == 0]) > 0 & length(SubDatMat$RNA[ SubDatMat$RNA > 0]) >= MinNum.Cells & length(SubDatMat$ATAC[ SubDatMat$ATAC > 0]) >= MinNum.Cells){
+				Res <- AssociationTest(SubDatMat, Gene, Peak, Method, Formula, Celltype, Res)
 			}
 		}
 	}## for
 
-	#Add new result into object
-	object@res <- res
+	#Add new Result into object
+	object@Res <- Res
 	return(object)
 }
 
 
 
 #' AssociationTest:
-#' @param DataM Data Matrix including RNA count, ATAC count and meta data
-#' @param method Statistic method used for association Test
-#' @return res Statistic result
-AssociationTest <- function(DataM, gene, peak, method, formula, celltype, res){
-	Spearman <- cor.test(DataM$ATAC, DataM$RNA, method = "spearman",exact=FALSE)
+#' @param DatMat Data Matrix including RNA count, ATAC count and meta data
+#' @param Method Statistic Method used for association Test
+#' @return Res Statistic Result
+AssociationTest <- function(DatMat, Gene, Peak, Method, Formula, Celltype, Res){
 
-	############# Zero-inflated Negative Binomial Regression based on hurdle model ##############
-	if(method == "hurdle"){
+	### Assocation analysis using Spearman correlation
+	Spearman <- cor.test(DatMat$ATAC, DatMat$RNA, method = "spearman",exact=FALSE)
+
+	### Assocation analysis using Zero-inflated Negative Binomial Regression based on hurdle model
+	if(Method == "hurdle"){
 		### hurdle is faster than zeroinfl, with similar performance
-		hurdle.test <- hurdle(formula, data = DataM, link = "logit", dist = "negbin")
-		hurdle.res <- summary(hurdle.test)
-		hurdle.res.count <- hurdle.res$coefficients$count["ATAC",]
-		hurdle.res.zero <- hurdle.res$coefficients$zero["ATAC",]
-		# Count model coefficients (truncated negbin with log link):
-		# Zero hurdle model coefficients (binomial with logit link):
-
-		out <- data.frame(gene=gene,peak=peak, Celltype = celltype, TotalCellNum=nrow(DataM), ExpressCellNum=length( DataM$RNA[ DataM$RNA > 0] ),OpenCellNum = length( DataM$ATAC[ DataM$ATAC > 0] ),
-							hurdle.res.zero.beta=hurdle.res.zero[1],hurdle.res.zero.se=hurdle.res.zero[2],hurdle.res.zero.z=hurdle.res.zero[3],hurdle.res.zero.p=hurdle.res.zero[4],
-							hurdle.res.count.beta=hurdle.res.count[1],hurdle.res.count.se=hurdle.res.count[2],hurdle.res.count.z=hurdle.res.count[3],hurdle.res.count.p=hurdle.res.count[4],
+		hurdle.test <- hurdle(Formula, data = DatMat, link = "logit", dist = "negbin")
+		hurdle.Res <- summary(hurdle.test)
+		hurdle.Res.count <- hurdle.Res$coefficients$count["ATAC",]
+		hurdle.Res.zero <- hurdle.Res$coefficients$zero["ATAC",]
+		out <- data.frame(Peak=Peak, Gene=Gene, Celltype = Celltype, TotalCellNum=nrow(DatMat), 
+							ExpRessCellNum=length(DatMat$RNA[DatMat$RNA > 0]),OpenCellNum = length(DatMat$ATAC[ DatMat$ATAC > 0]),
+							hurdle.Res.zero.beta=hurdle.Res.zero[1],hurdle.Res.zero.se=hurdle.Res.zero[2],hurdle.Res.zero.z=hurdle.Res.zero[3],hurdle.Res.zero.p=hurdle.Res.zero[4],
+							hurdle.Res.count.beta=hurdle.Res.count[1],hurdle.Res.count.se=hurdle.Res.count[2],hurdle.Res.count.z=hurdle.Res.count[3],hurdle.Res.count.p=hurdle.Res.count[4],
 							hurdle.AIC=AIC(hurdle.test),hurdle.BIC=BIC(hurdle.test),
 							spearman.rho = Spearman$estimate, spearman.p = Spearman$p.value
 							)
@@ -191,67 +189,63 @@ AssociationTest <- function(DataM, gene, peak, method, formula, celltype, res){
 		out[,c(10,14,18)] <- signif(out[,c(10,14,18)],digits = 6)
 	}
 	
-	#### Combine result
-	res<-rbind(res,out)
-	return(res)
+	### Combine Result
+	Res<-rbind(Res,out)
+	return(Res)
 }
 
 
 
-
-#' Extract.gene.peak.pair: code for extracting gene~peak pairs based on gene annotation and peak locations
+#' Extract.Peak2Gene.Pairs: Extracting Peak~Gene Pairs using bedtoolsr
 #'
 #' @param object Open4Gene object
-#' @param object gene.annotation GRanges
-#' @return Open4Gene object with updated gene.peak.pair
+#' @param object Gene.Annotation GRanges
+#' @return Open4Gene object with Peak2Gene.Pairs extracted
 #' @export
-Extract.gene.peak.pair <- function(object){
-	if(length(object@gene.peak.pair) > 0){
-			colnames(object@gene.peak.pair) <- c("gene","peak")
-			object@gene.peak.pair <- subset(object@gene.peak.pair, gene %in% rownames(object@RNA) & peak %in% rownames(object@ATAC))
-			if(length(object@gene.peak.pair) == 0){
-				msg <- paste("The gene~peak pairs provided are not available in RNA or ATAC data")
-					errors <- c(errors, msg)
+Extract.Peak2Gene.Pairs <- function(object){
+	if(length(object@Peak2Gene.Pairs) > 0){
+			colnames(object@Peak2Gene.Pairs) <- c("Peak", "Gene")
+			object@Peak2Gene.Pairs <- subset(object@Peak2Gene.Pairs, Peak %in% rownames(object@ATAC) & Gene %in% rownames(object@RNA))
+			if(length(object@Peak2Gene.Pairs) == 0){
+				Error.term <- paste("Please provide the Peak~Gene pairs available in RNA and ATAC data.")
+					Error <- c(Error, Error.term)
 			}
 	}else{
-		gene.annotation <- object@gene.annotation
-		gene.peak.dis <- object@gene.peak.dis
+		Gene.Annotation <- object@Gene.Annotation
+		Peak2Gene.Dis <- object@Peak2Gene.Dis
 		ATAC <- object@ATAC
-		gene.peak.pair <- object@gene.peak.pair
-		if(length(gene.annotation) == 0){
-					msg <- paste("The gene annotation is needed to extract the gene~peak pairs")
-					errors <- c(errors, msg)
-		}else if(length(gene.annotation) > 0 & gene.peak.dis >= 0){	### 
-					### Gene to bed
-					options(dplyr.summarise.inform = FALSE)
-					seqlevelsStyle(gene.annotation) <- "UCSC"
-					gene <- data.frame(gene.annotation)
-					gene <- subset(gene, gene_name %in% rownames(object@RNA))
-					gene <- gene %>% group_by(gene_name) %>% summarise(seqnames = unique(seqnames), start = min(start, na.rm=TRUE), end = max(end, na.rm=TRUE)) %>% as.data.frame
-					if(length(gene) == 0){
-							msg <- paste("No genes available in RNA dataset")
-							errors <- c(errors, msg)
-					}else{
-						gene.ext <- gene[,c(2:4,1)]
-						gene.ext$start <- gene.ext$start - gene.peak.dis
-						gene.ext$start[gene.ext$start < 0] <- 0
-						gene.ext$end <- gene.ext$end + gene.peak.dis
+		Peak2Gene.Pairs <- object@Peak2Gene.Pairs
+		if(length(Gene.Annotation) == 0){
+			Error.term <- paste("Please provide a valid gene annotation to extract Peak~Gene pairs.")
+			Error <- c(Error, Error.term)
+		}else if(length(Gene.Annotation) > 0 & Peak2Gene.Dis >= 0){
+			options(dplyr.summarise.inform = FALSE)
+			seqlevelsStyle(Gene.Annotation) <- "UCSC"
+			Gene <- data.frame(Gene.Annotation)
+			Gene <- subset(Gene, Gene.Name %in% rownames(object@RNA))
+			Gene <- Gene %>% group_by(Gene.Name) %>% summarise(seqnames = unique(seqnames), start = min(start, na.rm=TRUE), end = max(end, na.rm=TRUE)) %>% as.data.frame
+			if(length(Gene) == 0){
+					Error.term <- paste("Please provide genes available in RNA data")
+					Error <- c(Error, Error.term)
+			}else{
+				Gene.Pos <- Gene[,c(2:4,1)]
+				Gene.Pos$start <- Gene.Pos$start - Peak2Gene.Dis
+				Gene.Pos$start[Gene.Pos$start < 0] <- 0
+				Gene.Pos$end <- Gene.Pos$end + Peak2Gene.Dis
 			
-						### Peak to bed
-						peak <- rownames(ATAC)
-						peak <- data.frame(do.call(rbind, strsplit(peak, "-", fixed=TRUE)))
-						peak$Peak <- paste(peak$X1, peak$X2, peak$X3, sep = '-')
-			
-						### bedtools
-						gene.peak <- bedtoolsr::bt.intersect(gene.ext, peak, wa = TRUE, wb = TRUE)
-						object@gene.peak.pair <- gene.peak[,c(4,8)]
-						if(length(gene.peak) == 0){
-								msg <- paste("No gene~peak pairs identified using given distance.")
-								errors <- c(errors, msg)
-						}
-					}
+				Peak <- rownames(ATAC)
+				Peak <- data.frame(do.call(rbind, strsplit(Peak, "-", fixed=TRUE)))
+				Peak$Peak <- paste(Peak$X1, Peak$X2, Peak$X3, sep = '-')
+						
+				Gene.Peak <- bedtoolsr::bt.intersect(Peak, Gene.Pos, wa = TRUE, wb = TRUE)
+				object@Peak2Gene.Pairs <- Gene.Peak[,c(4,8)]
+				if(length(Gene.Peak) == 0){
+						Error.term <- paste("There is no Peak~Gene pairs within given distance. Please check data and enlarger Peak2Gene.Dis.")
+						Error <- c(Error, Error.term)
+				}
 			}
 		}
+	}
 	return(object)
 }
 
