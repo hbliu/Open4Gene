@@ -16,8 +16,10 @@ library(Open4Gene)
 1. Load example data (./Open4Gene/inst/extdata/Open4Gene.Test.Data)
 ```r
 load(system.file("extdata", "Open4Gene.Test.Data", package = "Open4Gene"))
+
 ls()
-# "ATAC.Counts", "RNA.Counts", "Gene.Annotation", "Meta.Data", "Peak.Gene"   
+# "ATAC.Counts", "RNA.Counts", "Gene.Annotation", "Meta.Data", "Peak.Gene"
+
 head(Peak.Gene)
 #Peak                   Gene
 #chr5-39400433-39402082 DAB2
