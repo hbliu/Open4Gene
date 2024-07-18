@@ -1,4 +1,4 @@
-# Open4Gene ([![DOI](https://zenodo.org/badge/748825666.svg)](https://zenodo.org/doi/10.5281/zenodo.12768471))
+# Open4Gene [![DOI](https://zenodo.org/badge/748825666.svg)](https://zenodo.org/doi/10.5281/zenodo.12768471)
 Hurdle Model-based Method for Peak-to-Gene Linkage Analysis.
 
 ## Main features of Open4Gene
