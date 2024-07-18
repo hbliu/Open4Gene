@@ -188,8 +188,7 @@ To perform genome-wide analysis, we recommend using Peak2Gene.Pairs to control t
 ## Contact
 For any question, you are welcome to report your issue in Github or contact us hongbo919@gmail.com and ksusztak@pennmedicine.upenn.edu
 
-
-
+[![DOI](https://zenodo.org/badge/748825666.svg)](https://zenodo.org/doi/10.5281/zenodo.12768471)
 
 
 
