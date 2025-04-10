@@ -77,8 +77,8 @@ You may need columns with (*) for the downstream analysis.
 ## Input
 This section describes how to prepare the input files for Open4Gene.
 Open4Gene needs following input data and parameters:
-- **RNA** [dgCMatrix] Sparse matrix of scRNAseq read count, gene in row and cell in column
-- **ATAC** [dgCMatrix] Sparse matrix of scATACseq read count, gene in row and cell in column
+- **RNA** [dgCMatrix] Sparse matrix of scRNAseq read count, gene (like DAB2) in row and cell in column
+- **ATAC** [dgCMatrix] Sparse matrix of scATACseq read count, peak (like chr5-39400433-39402082) in row and cell in column
 - **Meta.data** [data.frame] Meta data table with covariates; with cell ID in the rownames
 - **Covariates** [character] Assign covariates that are needed for the analysis
 - **Celltypes** [character] Assign celltype column from Meta.data
