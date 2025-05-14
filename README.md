@@ -139,7 +139,10 @@ Open4Gene can pick up the Peak2Gene.Pairs based on peak and gene distance (Peak2
 Here, the Gene.Annotation is a gene annotation in GRanges object, e.g. EnsDb.Hsapiens.v75.
 Code for preparing object for Open4Gene analysis using Gene.Annotation of EnsDb.Hsapiens.v75.
 
+Note: bedtools should be installed and in your PATH for this function
+
 ```r
+if (!require("bedtoolsr", quietly = TRUE)) devtools::install_github("PhanstielLab/bedtoolsr")
 if (!require("EnsDb.Hsapiens.v75", quietly = TRUE)) BiocManager::install("EnsDb.Hsapiens.v75")
 library(EnsDb.Hsapiens.v75)
 Gene.Annotation <- genes(EnsDb.Hsapiens.v75)
@@ -150,8 +153,24 @@ Open4Gene.obj <- CreateOpen4GeneObj(RNA = RNA.Counts, ATAC = ATAC.Counts, Meta.d
                             Celltypes = "Cell_Type")
 ```
 
-Then, Open4Gene.obj will be inputed to Run Open4Gene analysis.
+Then, Open4Gene.obj will be input to Run the Open4Gene analysis for all potential Peak2Gene.Pairs based on peak and gene distance.
+```r
+Open4Gene.obj <- Open4Gene(object = Open4Gene.obj,
+                          Celltype = "All", # Other options: Cell type name, e.g., "PT"; or "Each" to analyze each cell type
+                          Binary = FALSE,   # Binarize ATAC data if binary = TRUE
+                          MinNum.Cells = 5)   # Minimal number of cells with both RNA > 0 and ATAC > 0 for association test
+```
 
+The Peak2Gene.Pairs can be extracted before running Open4Gene as following, and used to control the number of pairs analyzed in each chunk after splitting:
+```r
+Open4Gene.obj <- Extract.Peak2Gene.Pairs(Open4Gene.obj)
+Peak2Gene.Pairs <- Open4Gene.obj@Peak2Gene.Pairs
+colnames(Peak2Gene.Pairs) <- c("Peak","Gene")
+head(Peak2Gene.Pairs)
+#Peak                   Gene
+#chr5-39185890-39186570 C9
+#chr5-39187099-39187586 C9
+```
 
 ## Run Open4Gene
 
