@@ -8,6 +8,9 @@ Hurdle Model-based Method for Peak-to-Gene Linkage Analysis.
 
 ## How to build & install in R (>= 4.1.0)
 ```r
+if (!require("devtools", quietly = TRUE)) install.packages("devtools")
+if (!require("BiocManager", quietly = TRUE)) install.packages("BiocManager")
+if (!require("GenomicRanges", quietly = TRUE)) BiocManager::install("GenomicRanges")
 devtools::install_github("hbliu/Open4Gene")
 library(Open4Gene)
 ```
@@ -137,6 +140,7 @@ Here, the Gene.Annotation is a gene annotation in GRanges object, e.g. EnsDb.Hsa
 Code for preparing object for Open4Gene analysis using Gene.Annotation of EnsDb.Hsapiens.v75.
 
 ```r
+if (!require("EnsDb.Hsapiens.v75", quietly = TRUE)) BiocManager::install("EnsDb.Hsapiens.v75")
 library(EnsDb.Hsapiens.v75)
 Gene.Annotation <- genes(EnsDb.Hsapiens.v75)
 Open4Gene.obj <- CreateOpen4GeneObj(RNA = RNA.Counts, ATAC = ATAC.Counts, Meta.data = Meta.Data,
