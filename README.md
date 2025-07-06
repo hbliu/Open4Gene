@@ -207,6 +207,11 @@ It is time-consuming to run genome-wide peak-to-gene linkage analysis using Open
 Open4Gene analysis on 3000 pairs takes about 5 hours.
 To perform genome-wide analysis, we recommend using Peak2Gene.Pairs to control the number of pairs analyzed in each chunk.
 
+## Other useful links
+:Kidney Disease Genetic Scorecard: https://susztaklab.com/GWAS2M/index.php
+
+## Citation
+Hongbo Liu et al., Kidney multiome-based genetic scorecard reveals convergent coding and regulatory variants. Science (2025). PMID: 39913582 (https://www.science.org/doi/full/10.1126/science.adp4753)
 
 ## Contact
 For any question, you are welcome to report your issue in Github or contact us hongbo919@gmail.com and ksusztak@pennmedicine.upenn.edu
