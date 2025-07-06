@@ -1,6 +1,6 @@
 # Open4Gene [![DOI](https://zenodo.org/badge/748825666.svg)](https://zenodo.org/doi/10.5281/zenodo.12768471)
 Hurdle Model-based Method for Peak-to-Gene Linkage Analysis.
-![embedded image][https://github.com/hbliu/Open4Gene]
+![embedded image][https://hbliulab.org/image/Resources/Open4Gene.Detail.png]
 
 ## Main features of Open4Gene
 - Accounting for excess zeros in single-nucleus RNA data based on a two-component mixture Hurdle model
