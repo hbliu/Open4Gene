@@ -95,7 +95,7 @@ CreateOpen4GeneObj <- setClass(
 #' @param MinNum.Cells Minimal number of cells with expression (RNA > 0) and open chromatin (ATAC > 0) for association test.
 #' @return Open4Gene object with Results from hurdle model
 #' @export
-Open4Gene <- function(object, Celltype = "All", Binary = FALSE, Method = "fasthurdle", MinNum.Cells = 5){
+Open4Gene <- function(object, Celltype = "All", Binary = FALSE, Method = "hurdle", MinNum.Cells = 5){
 	#### Extract Peak~Gene Pairs used for regression
 	print('Prepare Peak~Gene Pairs for regression analysis...', quote = FALSE)
 	object <- Extract.Peak2Gene.Pairs(object)
