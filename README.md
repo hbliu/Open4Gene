@@ -5,14 +5,16 @@ Hurdle Model-based Method for Peak-to-Gene Linkage Analysis.
 
 ## Main features of Open4Gene
 - Accounting for excess zeros in single-nucleus RNA data based on a two-component mixture Hurdle model
-- Modeling linkages between peak open chromatin (ATAC) and gene expression (RNA) using regression model with covariates
+- Modeling linkages between peak open chromatin (ATAC) and gene expression (RNA) using a regression model with covariates
 - Flexible specification of analysis using cells from a given cell type of interest, each cell type or all cells
+- Supporting fasthurdle, which provides a fast implementation of hurdle models using Rcpp
 
 ## How to build & install in R (>= 4.1.0)
 ```r
 if (!require("devtools", quietly = TRUE)) install.packages("devtools")
 if (!require("BiocManager", quietly = TRUE)) install.packages("BiocManager")
 if (!require("GenomicRanges", quietly = TRUE)) BiocManager::install("GenomicRanges")
+if (!require("fasthurdle", quietly = TRUE)) devtools::install_github("mkanai/fasthurdle")
 devtools::install_github("hbliu/Open4Gene")
 library(Open4Gene)
 ```
@@ -45,9 +47,10 @@ Open4Gene.obj <- CreateOpen4GeneObj(RNA = RNA.Counts,
 3. Run Open4Gene analysis
 ```r
 Open4Gene.obj <- Open4Gene(object = Open4Gene.obj,
-                          Celltype = "All", # Other options: Cell type name, e.g., "PT"; or "Each" to analyze each cell type
-                          Binary = FALSE,   # Binarize ATAC data if binary = TRUE
-                          MinNum.Cells = 5)   # Minimal number of cells with both RNA > 0 and ATAC > 0 for association test
+                          Celltype = "All",  # Other options: Cell type name, e.g., "PT"; or "Each" to analyze each cell type
+                          Binary = FALSE,    # Binarize ATAC data if binary = TRUE
+                          Method = "hurdle", # Method for implementation of hurdle models: "hurdle" (default) or "fasthurdle"
+                          MinNum.Cells = 5)  # Minimal number of cells with both RNA > 0 and ATAC > 0 for association test
 ```
 
 4. Output Open4Gene result
@@ -203,11 +206,21 @@ Open4Gene.obj <- Open4Gene(object = Open4Gene.obj,
                           MinNum.Cells = 5)
 ```
 
-
 ## Warning
 It is time-consuming to run genome-wide peak-to-gene linkage analysis using Open4Gene.
 Open4Gene analysis on 3000 pairs takes about 5 hours.
 To perform genome-wide analysis, we recommend using Peak2Gene.Pairs to control the number of pairs analyzed in each chunk.
+
+## Run Open4Gene using fasthurdle
+New version of Open4Gene supports fasthurdle, which provides a fast implementation of hurdle models using Rcpp (https://github.com/mkanai/fasthurdle). 
+```r
+Open4Gene.obj <- Open4Gene(object = Open4Gene.obj,
+                          Celltype = "All",
+                          Binary = FALSE,
+                          Method = "fasthurdle",
+                          MinNum.Cells = 5)
+```
+
 
 ## Other useful links
 :Kidney Disease Genetic Scorecard: https://susztaklab.com/GWAS2M/index.php
