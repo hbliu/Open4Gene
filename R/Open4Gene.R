@@ -99,7 +99,7 @@ Open4Gene <- function(object, Celltype = "All", Binary = FALSE, Method = "hurdle
 	#### Extract Peak~Gene Pairs used for regression
 	print('Prepare Peak~Gene Pairs for regression analysis...', quote = FALSE)
 	object <- Extract.Peak2Gene.Pairs(object)
-	print(c(paste("Start regression analysis for",nrow(object@Peak2Gene.Pairs), "Peak~Gene Pairs...")), quote = FALSE)
+	print(c(paste("Start regression analysis for", nrow(object@Peak2Gene.Pairs), "Peak~Gene Pairs using", Method)), quote = FALSE)
 	Res <- data.frame()
 	
 	#### Extract RNA and ATAC used for regression
@@ -175,7 +175,7 @@ AssociationTest <- function(DatMat, Gene, Peak, Method, Formula, Celltype, Res){
 
 	### Association analysis using Zero-inflated Negative Binomial Regression based on hurdle model
 	if(Method == "hurdle"){
-		print(Method)
+		# print(Method)
 		### hurdle is faster than zeroinfl, with similar performance
 		hurdle.test <- hurdle(Formula, data = DatMat, link = "logit", dist = "negbin")
 		hurdle.Res <- summary(hurdle.test)
@@ -194,7 +194,7 @@ AssociationTest <- function(DatMat, Gene, Peak, Method, Formula, Celltype, Res){
 
 	### Association analysis using Zero-inflated Negative Binomial Regression based on hurdle model, implemented by fasthurdle (https://github.com/mkanai/fasthurdle)
 	if(Method == "fasthurdle"){
-		print(Method)
+		#print(Method)
 		if (!require("devtools", quietly = TRUE)) install.packages("devtools")
 		if (!require("fastglm", quietly = TRUE)) install.packages("fastglm")
 		if (!require("fasthurdle", quietly = TRUE)) devtools::install_github("mkanai/fasthurdle")
