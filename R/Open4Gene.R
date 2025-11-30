@@ -91,11 +91,11 @@ CreateOpen4GeneObj <- setClass(
 #' @param object Open4Gene object
 #' @param Celltype User specified cell type defined in Celltypes column of Meta.data. "All" to test using all cells. "Each" to run test for each cell type. Others, the test will be perform for a given cell type.
 #' @param Binary If TRUE, the ATAC > 1 will be converted as 1.
-#' @param Method "hurdle" for Zero-inflated Negative Binomial Regression based on hurdle model. Statistic method used to calculate the correlation between ATAC and RNA. 
+#' @param Method "hurdle" (default) or "fasthurdle" for Zero-inflated Negative Binomial Regression based on hurdle model. Statistical method used to calculate the correlation between ATAC and RNA. 
 #' @param MinNum.Cells Minimal number of cells with expression (RNA > 0) and open chromatin (ATAC > 0) for association test.
 #' @return Open4Gene object with Results from hurdle model
 #' @export
-Open4Gene <- function(object, Celltype = "All", Binary = FALSE, Method = "hurdle", MinNum.Cells = 5){
+Open4Gene <- function(object, Celltype = "All", Binary = FALSE, Method = "fasthurdle", MinNum.Cells = 5){
 	#### Extract Peak~Gene Pairs used for regression
 	print('Prepare Peak~Gene Pairs for regression analysis...', quote = FALSE)
 	object <- Extract.Peak2Gene.Pairs(object)
@@ -159,23 +159,48 @@ Open4Gene <- function(object, Celltype = "All", Binary = FALSE, Method = "hurdle
 	#Add new Result into object
 	object@Res <- Res
 	return(object)
+
 }
 
 
 
 #' AssociationTest:
 #' @param DatMat Data Matrix including RNA count, ATAC count and meta data
-#' @param Method Statistic Method used for association Test
+#' @param Method Statistic Method used for the association Test
 #' @return Res Statistic Result
 AssociationTest <- function(DatMat, Gene, Peak, Method, Formula, Celltype, Res){
 
-	### Assocation analysis using Spearman correlation
+	### Association analysis using Spearman correlation
 	Spearman <- cor.test(DatMat$ATAC, DatMat$RNA, method = "spearman",exact=FALSE)
 
-	### Assocation analysis using Zero-inflated Negative Binomial Regression based on hurdle model
+	### Association analysis using Zero-inflated Negative Binomial Regression based on hurdle model
 	if(Method == "hurdle"){
+		print(Method)
 		### hurdle is faster than zeroinfl, with similar performance
 		hurdle.test <- hurdle(Formula, data = DatMat, link = "logit", dist = "negbin")
+		hurdle.Res <- summary(hurdle.test)
+		hurdle.Res.count <- hurdle.Res$coefficients$count["ATAC",]
+		hurdle.Res.zero <- hurdle.Res$coefficients$zero["ATAC",]
+		out <- data.frame(Peak=Peak, Gene=Gene, Celltype = Celltype, TotalCellNum=nrow(DatMat), 
+							ExpRessCellNum=length(DatMat$RNA[DatMat$RNA > 0]),OpenCellNum = length(DatMat$ATAC[ DatMat$ATAC > 0]),
+							hurdle.Res.zero.beta=hurdle.Res.zero[1],hurdle.Res.zero.se=hurdle.Res.zero[2],hurdle.Res.zero.z=hurdle.Res.zero[3],hurdle.Res.zero.p=hurdle.Res.zero[4],
+							hurdle.Res.count.beta=hurdle.Res.count[1],hurdle.Res.count.se=hurdle.Res.count[2],hurdle.Res.count.z=hurdle.Res.count[3],hurdle.Res.count.p=hurdle.Res.count[4],
+							hurdle.AIC=AIC(hurdle.test),hurdle.BIC=BIC(hurdle.test),
+							spearman.rho = Spearman$estimate, spearman.p = Spearman$p.value
+							)
+		out[,c(7:9,11:13,17)] <- round(out[,c(7:9,11:13,17)],digits = 6)
+		out[,c(10,14,18)] <- signif(out[,c(10,14,18)],digits = 6)
+	}
+
+	### Association analysis using Zero-inflated Negative Binomial Regression based on hurdle model, implemented by fasthurdle (https://github.com/mkanai/fasthurdle)
+	if(Method == "fasthurdle"){
+		print(Method)
+		if (!require("devtools", quietly = TRUE)) install.packages("devtools")
+		if (!require("fastglm", quietly = TRUE)) install.packages("fastglm")
+		if (!require("fasthurdle", quietly = TRUE)) devtools::install_github("mkanai/fasthurdle")
+		library(fasthurdle)
+		### fasthurdle is faster than hurdle, with similar performance
+		hurdle.test <- fasthurdle(Formula, data = DatMat, link = "logit", dist = "negbin")
 		hurdle.Res <- summary(hurdle.test)
 		hurdle.Res.count <- hurdle.Res$coefficients$count["ATAC",]
 		hurdle.Res.zero <- hurdle.Res$coefficients$zero["ATAC",]
