@@ -1,4 +1,4 @@
-# Open4Gene [![DOI](https://zenodo.org/badge/748825666.svg)](https://zenodo.org/doi/10.5281/zenodo.12768471)
+# Open4Gene [https://zenodo.org/badge/748825666.svg](https://zenodo.org/doi/10.5281/zenodo.12768471)
 Hurdle Model-based Method for Peak-to-Gene Linkage Analysis.
 
 <img src="https://hbliulab.org/image/Resources/Open4Gene.Detail.png" alt="isolated" width="600"/>
@@ -212,7 +212,7 @@ Open4Gene analysis on 3000 pairs takes about 5 hours.
 To perform genome-wide analysis, we recommend using Peak2Gene.Pairs to control the number of pairs analyzed in each chunk.
 
 ## Run Open4Gene using fasthurdle
-New version of Open4Gene supports fasthurdle, which provides a fast implementation of hurdle models using Rcpp (https://github.com/mkanai/fasthurdle). 
+New version of Open4Gene supports [fasthurdle](https://github.com/mkanai/fasthurdle), which provides a fast implementation of hurdle models using Rcpp (Kanai et al., medRxiv 2025).
 ```r
 Open4Gene.obj <- Open4Gene(object = Open4Gene.obj,
                           Celltype = "All",
@@ -223,7 +223,7 @@ Open4Gene.obj <- Open4Gene(object = Open4Gene.obj,
 
 
 ## Other useful links
-:Kidney Disease Genetic Scorecard: https://susztaklab.com/GWAS2M/index.php
+Kidney Disease Genetic Scorecard: https://susztaklab.com/GWAS2M/index.php
 
 ## Citation
 Hongbo Liu et al., Kidney multiome-based genetic scorecard reveals convergent coding and regulatory variants. Science (2025). PMID: 39913582 (https://www.science.org/doi/full/10.1126/science.adp4753)
