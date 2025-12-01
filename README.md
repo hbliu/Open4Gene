@@ -223,14 +223,15 @@ Open4Gene.obj <- Open4Gene(object = Open4Gene.obj,
 
 
 ## Other useful links
-- Kidney Disease Genetic Scorecard: https://susztaklab.com/GWAS2M/index.php
-- Liu Lab at the University of Rochester: https://hbliulab.org
+Kidney Disease Genetic Scorecard: https://susztaklab.com/GWAS2M/index.php
 
 ## Citation
 Hongbo Liu et al., Kidney multiome-based genetic scorecard reveals convergent coding and regulatory variants. Science (2025). PMID: 39913582 (https://www.science.org/doi/full/10.1126/science.adp4753)
 
 ## Contact
-For any question, you are welcome to report your issue in Github or contact us Hongbo Liu (Hongbo_Liu@URMC.Rochester.edu) and Katalin Susztak (ksusztak@pennmedicine.upenn.edu).
+For any questions, you are welcome to report your issue on GitHub or contact us: Hongbo Liu (Hongbo_Liu@URMC.Rochester.edu) and Katalin Susztak (ksusztak@pennmedicine.upenn.edu).
+- Liu Lab at the University of Rochester: https://hbliulab.org
+- Susztak Lab at the University of Pennsylvania: https://www.med.upenn.edu/susztaklab
 
 
 
