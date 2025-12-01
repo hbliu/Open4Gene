@@ -212,7 +212,7 @@ Open4Gene analysis on 3000 pairs takes about 5 hours.
 To perform genome-wide analysis, we recommend using Peak2Gene.Pairs to control the number of pairs analyzed in each chunk.
 
 ## Run Open4Gene using fasthurdle
-New version (v1.1.0) of Open4Gene supports [fasthurdle](https://github.com/mkanai/fasthurdle), which provides a fast implementation of hurdle models using Rcpp (Kanai et al., medRxiv 2025).
+New version (v1.1.0) of Open4Gene supports [fasthurdle](https://github.com/mkanai/fasthurdle), which provides a fast implementation of hurdle models using Rcpp (Kanai, M. et al., medRxiv 2025).
 ```r
 Open4Gene.obj <- Open4Gene(object = Open4Gene.obj,
                           Celltype = "All",
