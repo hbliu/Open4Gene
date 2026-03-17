@@ -6,7 +6,7 @@ Hurdle Model-based Method for Peak-to-Gene Linkage Analysis.
 ## Main features of Open4Gene
 - Accounting for excess zeros in single-nucleus RNA data based on a two-component mixture Hurdle model
 - Modeling linkages between peak open chromatin (ATAC) and gene expression (RNA) using a regression model with covariates
-- Flexible specification of analysis using cells from a given cell type of interest, each cell type or all cells
+- Flexible specification of analysis using cells from a given cell type of interest, each cell type, or all cells
 - Supporting fasthurdle, which provides a fast implementation of hurdle models using Rcpp
 
 ## How to build & install in R (>= 4.1.0)
@@ -62,7 +62,7 @@ write.table(Open4Gene.obj@Res, file = "Open4Gene.obj.All.res.txt", sep="\t", col
 On output, Open4Gene.obj@Res provides the following values for each gene~peak pair:
 1. Peak
 2. Gene
-3. Celltype (Cell type name, "All" means all cell in the input data)
+3. Celltype (Cell type name, "All" means all cells in the input data)
 4. TotalCellNum (Total number of cells used for the analysis)
 5. ExpressCellNum (Number of cells expressing given gene, RNA read count > 1)
 6. OpenCellNum (Number of cells with open chromatin in given peak, ATAC read count > 1)
@@ -74,8 +74,8 @@ On output, Open4Gene.obj@Res provides the following values for each gene~peak pa
 12. hurdle.res.count.se (standard error value of count model)
 13. hurdle.res.count.z (z value of count model)
 14. hurdle.res.count.p (p value of count model) *
-15. hurdle.AIC (Akaike information criterion of hurdle model)
-16. hurdle.BIC (Bayesian information criterion of hurdle model)
+15. hurdle.AIC (Akaike information criterion of the hurdle model)
+16. hurdle.BIC (Bayesian information criterion of the hurdle model)
 17. spearman.rho (Spearman's rank correlation coefficient between RNA and ATAC)
 18. spearman.p (Spearman's p value between RNA and ATAC)
 
@@ -126,12 +126,12 @@ head(rownames(Meta.Data))
 **3. Covariates**
 
 The covariates are used for the regression analysis.
-Features of cells in metadata can be used as covariates, e.g. lognCount_RNA, percent.mt.
+Features of cells in metadata can be used as covariates, e.g. lognCount_RNA, percent.mt. The log-transformed RNA count (lognCount_RNA) is recommended as the covariate rather than the RNA count, as it yields more robust results.
 
 
 **4. Peak2Gene.Pairs**
 
-This is a dataframe that contains Peak~Gene pairs for Open4Gene, Peak (first column) and Gene (second column), as following.
+This is a dataframe that contains Peak~Gene pairs for Open4Gene, Peak (first column) and Gene (second column), as follows.
 | Peak | Gene                   |
 | ---------------------- | ---- |
 | chr5-39400433-39402082 | DAB2 |
@@ -141,7 +141,7 @@ This is a dataframe that contains Peak~Gene pairs for Open4Gene, Peak (first col
 **5. Preparing the object for Open4Gene analysis using Gene.Annotation**
 
 Open4Gene can pick up the Peak2Gene.Pairs based on peak and gene distance (Peak2Gene.Dis) based on the input data.
-Here, the Gene.Annotation is a gene annotation in GRanges object, e.g. EnsDb.Hsapiens.v75.
+Here, the Gene.Annotation is a gene annotation in a GRanges object, e.g. EnsDb.Hsapiens.v75.
 Code for preparing an object for Open4Gene analysis using Gene.Annotation of EnsDb.Hsapiens.v75.
 
 Note: bedtools should be installed and in your PATH for this function.
@@ -207,9 +207,10 @@ Open4Gene.obj <- Open4Gene(object = Open4Gene.obj,
 ```
 
 ## Warning
-It is time-consuming to run genome-wide peak-to-gene linkage analysis using Open4Gene.
+Running genome-wide peak-to-gene linkage analysis with Open4Gene is time-consuming due to the computational step in the Hurdle model.
 Open4Gene analysis on 3000 pairs takes about 5 hours.
 To perform genome-wide analysis, we recommend using Peak2Gene.Pairs to control the number of pairs analyzed in each chunk.
+Open4Gene with fasthurdle will be 2-10 times faster than the traditional Hurdle model, as detailed below.
 
 ## Run Open4Gene using fasthurdle
 New version (v1.1.0) of Open4Gene supports [fasthurdle](https://github.com/mkanai/fasthurdle), which provides a fast implementation of hurdle models using Rcpp (Kanai, M. et al., medRxiv 2025).
