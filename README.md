@@ -175,6 +175,7 @@ head(Peak2Gene.Pairs)
 #Peak                   Gene
 #chr5-39185890-39186570 C9
 #chr5-39187099-39187586 C9
+write.table(Peak2Gene.Pairs,"Peak2Gene.Pairs.txt",col.names=T,row.names=F,quote=F,sep="\t")
 ```
 
 ## Run Open4Gene
@@ -208,9 +209,15 @@ Open4Gene.obj <- Open4Gene(object = Open4Gene.obj,
 
 ## Warning
 Running genome-wide peak-to-gene linkage analysis with Open4Gene is time-consuming due to the computational step in the Hurdle model.
-Open4Gene analysis on 3000 pairs takes about 5 hours.
-To perform genome-wide analysis, we recommend using Peak2Gene.Pairs to control the number of pairs analyzed in each chunk.
+Open4Gene analysis with the traditional Hurdle model on 3000 pairs takes about 5 hours.
 Open4Gene with fasthurdle will be 2-10 times faster than the traditional Hurdle model, as detailed below.
+
+To perform genome-wide analysis, we recommend using Peak2Gene.Pairs.chunk to control the number of pairs analyzed in each chunk.
+Code to split the Peak2Gene.Pairs into chunks, each of which has 3,000 pairs.
+
+~~~sh
+split -l 3000 -a4 -d Peak2Gene.Pairs.txt Peak2Gene.Pairs.chunk
+~~~
 
 ## Run Open4Gene using fasthurdle
 New version (v1.1.0) of Open4Gene supports [fasthurdle](https://github.com/mkanai/fasthurdle), which provides a fast implementation of hurdle models using Rcpp (Kanai, M. et al., medRxiv 2025).
