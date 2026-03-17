@@ -213,7 +213,7 @@ Open4Gene analysis with the traditional Hurdle model on 3000 pairs takes about 5
 Open4Gene with fasthurdle will be 2-10 times faster than the traditional Hurdle model, as detailed below.
 
 To perform genome-wide analysis, we recommend using Peak2Gene.Pairs.chunk to control the number of pairs analyzed in each chunk.
-Code to split the Peak2Gene.Pairs into chunks, each of which has 3,000 pairs.
+Shell code to split the Peak2Gene.Pairs into chunks, each of which has 3,000 pairs.
 
 ~~~sh
 split -l 3000 -a4 -d Peak2Gene.Pairs.txt Peak2Gene.Pairs.chunk
