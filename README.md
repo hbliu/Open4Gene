@@ -7,7 +7,7 @@ Hurdle Model-based Method for Peak-to-Gene Linkage Analysis.
 - Accounting for excess zeros in single-nucleus RNA data based on a two-component mixture Hurdle model
 - Modeling linkages between peak open chromatin (ATAC) and gene expression (RNA) using a regression model with covariates
 - Flexible specification of analysis using cells from a given cell type of interest, each cell type, or all cells
-- Supporting fasthurdle, which provides a fast implementation of hurdle models using Rcpp
+- Supporting [fasthurdle](https://github.com/mkanai/fasthurdle), which provides a fast implementation of hurdle models using Rcpp
 
 ## How to build & install in R (>= 4.1.0)
 ```r
@@ -220,7 +220,7 @@ split -l 3000 -a4 -d Peak2Gene.Pairs.txt Peak2Gene.Pairs.chunk
 ~~~
 
 ## Run Open4Gene using fasthurdle
-New version (v1.1.0) of Open4Gene supports [fasthurdle](https://github.com/mkanai/fasthurdle), which provides a fast implementation of hurdle models using Rcpp (Kanai, M. et al., medRxiv 2025).
+New version (v1.1.0) of Open4Gene supports [fasthurdle](https://github.com/mkanai/fasthurdle), which provides a fast implementation of hurdle models using Rcpp ([Kanai, M. et al., Nature 2026](https://www.nature.com/articles/s41586-026-11078-2)).
 ```r
 Open4Gene.obj <- Open4Gene(object = Open4Gene.obj,
                           Celltype = "All",
